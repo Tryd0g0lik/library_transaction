@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "t-flask-library-books"
+version = "0.1.0"
+description = ""
+authors = ["Tryd0g0lik <work80@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-dotenv = "^1.0.1"
+pytest-cov = "^6.0.0"
+pytest-asyncio = "^0.24.0"
+flower = "^2.0.1"
+
+[tool.poetry.group.dev.dependencies]
+asyncio = "^3.4.3"
+autohooks = "^24.2.0"
+flake8 = "^7.1.1"
+pre-commit = "^3.8.0"
+markdown = "^3.7"
+pylint = "^3.3.1"
+isort = "^5.13.2"
+black = "^24.8.0"
+postgres = "^4.0"
+psycopg2-binary = "^2.9.10"
+sqlalchemy = "2.0.36"
+pytest = "^8.3.3"
+flask = {extras = ["async"], version = "^3.1.0"}
+wtforms = "^3.2.1"
+flask-sqlalchemy = "^3.1.1"
+flask-login = "^0.6.3"
+flask-bootstrap = "^3.3.7.1"
+flask-jwt-extended = "^4.7.1"
+flask-wtf = "^1.2.2"
+flask-admin = {extras = ["export", "images", "s3", "sqlalchemy", "translation"], version = "^1.6.1"}
+flask-swagger-ui = "^4.11.1"
+flask-bcrypt = "^1.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
