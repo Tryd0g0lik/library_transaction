@@ -1,8 +1,6 @@
 """Models of db"""
 import logging
-
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from dotenv_ import APP_POSTGRES_DBNAME, DSN
