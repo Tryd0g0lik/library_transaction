@@ -1,6 +1,6 @@
 """
 Here is an abstract table. This table is inherit
-from the flask's 'DeclarativeBase.
+from the flask's 'DeclarativeBase. Abstract form
 '"""
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import (Column, Integer)
