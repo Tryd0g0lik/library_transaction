@@ -2,6 +2,7 @@
 Here is the run app of Flask and
 USER's COMMAND of user's interface/ It's for create random of admin
 """
+from typing import (Dict, Any)
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_bootstrap import Bootstrap
@@ -13,7 +14,7 @@ from dotenv_ import (SECRET_KEY, DSN, )
 
 
 @admin_pannel()
-def create_flask():
+def create_flask() -> Dict[str, Any]:
     """
     Creating the app flask
     :return:
