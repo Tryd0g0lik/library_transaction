@@ -4,6 +4,7 @@ import dotenv
 
 dotenv.load_dotenv()
 
+SECRET_KEY = os.getenv("SECRET_KEY", "")
 APP_POSTGRES_HOST = os.getenv("APP_POSTGRES_HOST", "")
 APP_POSTGRES_PORT = os.getenv("APP_POSTGRES_PORT", "")
 APP_PROTOKOL = os.getenv("APP_PROTOKOL", "")
