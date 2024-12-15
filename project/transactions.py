@@ -9,15 +9,15 @@ from project.models_some.model_client import Clients
 from project.models_some.model_book import Books
 from project.models_some.model_borrow import Borrows
 
-class Library:
-    """
-    TODO:" This is a management for control the transaction.
-        Logics is for work to an API and only one method  \
-        the 'pending' is working to the 'celery task.
-    """
-    
-    def __init__(self):
-        self.session = get_session()
-        self._transaction = None
+# class Library_basis:
+#     """
+#     TODO:" This is basic class for a work with lybrary db.
+#     """
+#
+#     def __init__(self):
+#         self.session = get_session()
+#         self._transaction = None
+#
+#
     
     

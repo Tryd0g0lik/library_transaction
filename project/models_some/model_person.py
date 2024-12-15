@@ -4,7 +4,7 @@ from sqlalchemy import (Column, DateTime, String)
 from project.models_some.model_init import Base
 
 
-class Persons(Base):
+class Person(Base):
     """
     :param firstname: str. Author's name.
     :param birthday: datetime.

@@ -14,13 +14,13 @@ def get_session():
     log = logging.getLogger(__name__)
     configure_logging(logging.INFO)
     # Create on ENGINE
-    log.info("[get_session]: START")
-    log.info(f"[get_session]: DSN {DSN}")
+    log.info(f"[{get_session.__name__}]: START")
+    log.info(f"[{get_session.__name__}]: DSN {DSN}")
     engine = create_engine(DSN)
-    log.info("[get_session]: received the engine of sqlalchemy")
+    log.info("f[{get_session.__name__}]: received the engine of sqlalchemy")
     Base.metadata.create_all(bind=engine)
     Session = sessionmaker(bind=engine)
-    log.info("[get_session]: before run 'Session'")
+    log.info(f"[{get_session.__name__}]: before run 'Session'")
     """Receive the session"""
     return Session()
 

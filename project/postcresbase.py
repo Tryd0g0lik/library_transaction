@@ -43,20 +43,19 @@ def create_database_if_not_exsists(db_name: str) -> bool:
             sql_text = f"CREATE DATABASE {db_name}"
             cursor.execute(sql.SQL(sql_text))
             status_text = status_text.replace(
-                "None", f"[create_database_if_not_exsists]: \
+                "None", f"[{create_database_if_not_exsists.__name__}]: \
 База данных '{db_name}' успешно создана."
             )
             status = True
         else:
             status_text = status_text.replace(
-                "None", f"[create_database_if_not_exsists]: \
+                "None", f"[{create_database_if_not_exsists.__name__}]: \
 База данных '{db_name}' уже существует."
             )
-    
-        print(status_text)
     except Exception as e:
         status_text = status_text.replace(
-            "None", f"[create_database_if_not_exsists] Mistake {e.__str__()}"
+            "None", f"[{create_database_if_not_exsists.__name__}] \
+Mistake {e.__str__()}"
         )
     finally:
         # CLOSE the connection

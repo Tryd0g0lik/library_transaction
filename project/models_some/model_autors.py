@@ -2,10 +2,10 @@
 from datetime import datetime
 from sqlalchemy import (Column, DateTime, String)
 from project.models_some.model_init import Base
-from project.models_some.model_person import Persons
+from project.models_some.model_person import Person
 
 
-class Authors(Persons):
+class Author(Person):
     """
     :param firstname: str. Author's name.
     :param secondname: str. Authors's secondname.
