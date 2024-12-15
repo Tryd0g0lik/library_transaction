@@ -61,29 +61,35 @@ Mistake => {e.__str__()}")
             self.close()
             log.info(f"[{Lybrary_Author.get_one.__name__}] END")
             
-    def update(self, index:[int, None], new_firstname_:[str, None]=None,
+    def update_one(self, index:int, new_firstname_:[str, None]=None,
             new_secondname_:[str, None] = None,
             new_birthday_:[str, None]=None) -> bool:
         """
         TODO: New data we receive to entrypoint for update  the author data \
             from 'Author' db's table.
+        :param index: int. THis is the author's ID.
         :param firstname_: str. Author's name.
         :param secondname_: str. Authors's secondname.
         :param birthday_: datetime. It means the author's birthday.
         :return: bool. 'True' it means what an everyone attributes went \
         the everyone processing the very well. Or not
         """
-        log.info(f"[{Lybrary_Author.update.__name__}] START")
+        log.info(f"[{Lybrary_Author.update_one.__name__}] START")
         status = False
         try:
             # get data from db
             authors = self.session(Author).query.filter_by(id=index).first()
+            if authors:
+                text = f"[{Lybrary_Author.update_one.__name__}] \
+Mistake => Not working index."
+                log.info(text)
+                raise ValueError(text)
             attrib_list = [new_firstname_, new_secondname_, new_birthday_]
             # Here, need to find working attributes then will be change
             # data in db
             working_attrib = [view for view in attrib_list if view]
             if len(working_attrib) == 0:
-                text = f"[{Lybrary_Author.update.__name__}] \
+                text = f"[{Lybrary_Author.update_one.__name__}] \
 Mistake => Object not found, was"
                 log.info(text)
                 raise ValueError(text)
@@ -103,10 +109,39 @@ was updated")
             log.info(status_text.join("Db was updated"))
             status = True
         except Exception as e:
-            log.info(f"[{Lybrary_Author.update.__name__}] \
+            log.info(f"[{Lybrary_Author.update_one.__name__}] \
 Mistake => {e.__str__()}")
         finally:
             self.close()
-            log.info(f"[{Lybrary_Author.update.__name__}] END. \
+            log.info(f"[{Lybrary_Author.update_one.__name__}] END. \
 It all was  {status} ")
+            return status
+    def remove_one(self, index: int) -> bool:
+        """
+        TODO: Delete an one object  from db.  
+        :param index: int. THis is the author's ID.
+        :return: 'True' meaning what the object removed from db. Or Not
+        """
+        log.info(f"[{Lybrary_Author.remove_one.__name__}] START")
+        status_text = f"[{Lybrary_Author.remove_one}] \
+Mistake => Not working index."
+        status = False
+        try:
+            # get data from db
+            authors = self.session(Author).query.filter_by(id=index).first()
+            if authors:
+                log.info(status_text)
+                raise ValueError(status_text)
+            authors.delete()
+            self.session.commit()
+            status = True
+            status_text = status_text.replace(
+                "Mistake => Not working index",
+                "Mistake => all went very well. Meaning is the True"
+            )
+        except Exception as e:
+            status_text = f"[{Lybrary_Author.remove_one}] \
+Mistake => {e.__str__()}"
+        finally:
+            log.info(status_text)
             return status
