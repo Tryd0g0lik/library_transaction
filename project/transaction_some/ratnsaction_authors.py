@@ -1,86 +1,118 @@
-from typing import (Dict, Any, )
+"""
+Here, is a DYNAMICALLY class for work with tabular models from db.
+This tabular models it means the 'Author' and 'Client' models.
+To the entrypoint we receive only one model. It's  from 'Client' or 'Author'.
+Then, everyone methods from the Lybrary_Person's class has as common for
+working with 'Author' and 'Client' models
+"""
+from typing import (Type, Union)
 import logging
 from datetime import datetime
 from project.transaction_some.transactin_basic import Library_basis
 from project.models_some.model_autors import Author
+from project.models_some.model_client import Client
 from project.logs import configure_logging
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
-class Lybrary_Author(Library_basis):
+
+class Lybrary_Person(Library_basis):
+    """
+    Here, is a DYNAMICALLY class for work with tabular models from db.
+    This tabular models it means the 'Author' and 'Client' models.
+    """
+    def __init__(self,  model_name: Type[Union[Author, Client]]):
+        """
+        TODO: To the entrypoint we receive only one model. It's  
+            from 'Client' or 'Author'.
+        :param model: Type[Union[Author, Client]]
+        """
+        super().__init__()
+        self.__model_name = model_name
     
+    def get_model_name(self) -> Type[Union[Author, Client]]:
+        """
+        TODO: Receives a value from a private variable. This a variable 
+            means the 'Author' and 'Client' models
+        :return: Type[Union[Author, Client]]
+        """
+        return self.__model_name
     def add_one(self, firstname_:str,
             secondname_:str,
             birthday_: datetime = datetime.utcnow) -> bool:
         """
-        TODO: New author adds to the 'Author' db's table
-        :param firstname_: str. Author's name.
-        :param secondname_: str. Authors's secondname.
-        :param birthday_: datetime.
+        TODO: New model's line adds to the Model db's table
+        :param firstname_: str. The person's firstname.
+        :param secondname_: str.  The person's secondname.
+        :param birthday_:  The person's datetime.
         :return: bool. 'True' it means was created new line of db or not.
         """
-        log.info(f"[{Lybrary_Author.add_one.__name__}] START")
+        log.info(f"[{Lybrary_Person.add_one.__name__}] START")
         status = False
         try:
-            author = Author(firstname=firstname_,
+            Model = self.get_model_name()
+            model = Model(firstname=firstname_,
                             secondname=secondname_,
                             birthday=birthday_
                             )
-            self.session.add(author)
+            self.session.add(model)
             self.session.commit()
             status = True
         except Exception as e:
-            log.info(f"[{Lybrary_Author.add_one.__name__}]: \
+            log.info(f"[{Lybrary_Person.add_one.__name__}]: \
 Mistake => {e.__str__()}")
         finally:
             # CLOSE THE SESSION
             self.close()
-            log.info(f"[{Lybrary_Author.add_one.__name__}] END")
+            log.info(f"[{Lybrary_Person.add_one.__name__}] END")
             return status
         
-    def get_one(self, index: int) -> dict:
+    def get_one(self, index: int) -> Type[Union[Author, Client]]:
         """
-        TODO: Select tne one person from the 'Author' db's table.
-        :param index: int.
+        TODO: Select tne one person from the 'Model' db's table.
+        :param index: int. The person's ID from db
         :return: dict a one person from selected by 'id'.
         """
-        log.info(f"[{Lybrary_Author.get_one.__name__}] START")
+        log.info(f"[{Lybrary_Person.get_one.__name__}] START")
         try:
-            author = self.session(Author).query.filter_by(id=index).first()
-            if not author:
-                text = f"[{Lybrary_Author.get_one.__name__}] \
-Mistake => Not found the author's ID"
+            Model = self.get_model_name()
+            model = self.session(Model).query.filter_by(id=index).first()
+            if not model:
+                text = f"[{Lybrary_Person.get_one.__name__}] \
+Mistake => Not found the model's ID"
                 log.info(text)
                 raise ValueError(text)
-            return author.__dict__
+            return model
                 
         except Exception as e:
-            log.info(f"[{Lybrary_Author.get_one.__name__}] \
+            log.info(f"[{Lybrary_Person.get_one.__name__}] \
 Mistake => {e.__str__()}")
         finally:
             self.close()
-            log.info(f"[{Lybrary_Author.get_one.__name__}] END")
+            log.info(f"[{Lybrary_Person.get_one.__name__}] END")
             
     def update_one(self, index:int, new_firstname_:[str, None]=None,
             new_secondname_:[str, None] = None,
             new_birthday_:[str, None]=None) -> bool:
         """
-        TODO: New data we receive to entrypoint for update  the author data \
-            from 'Author' db's table.
-        :param index: int. THis is the author's ID.
-        :param firstname_: str. Author's name.
-        :param secondname_: str. Authors's secondname.
-        :param birthday_: datetime. It means the author's birthday.
+        TODO: New data, we receive for entrypoint, for update the model's data \
+            from tabular db's model. From entrypoint we can receive one \
+            or more variables.
+        :param index: int. The person's ID from db.
+        :param new_firstname_: str. The new person's firstname.
+        :param new_secondname_: str.  The new person's secondname.
+        :param new_birthday_:  The new person's datetime.
         :return: bool. 'True' it means what an everyone attributes went \
         the everyone processing the very well. Or not
         """
-        log.info(f"[{Lybrary_Author.update_one.__name__}] START")
+        log.info(f"[{Lybrary_Person.update_one.__name__}] START")
         status = False
         try:
             # get data from db
-            authors = self.session(Author).query.filter_by(id=index).first()
+            Model = self.get_model_name()
+            authors = self.session(Model).query.filter_by(id=index).first()
             if authors:
-                text = f"[{Lybrary_Author.update_one.__name__}] \
+                text = f"[{Lybrary_Person.update_one.__name__}] \
 Mistake => Not working index."
                 log.info(text)
                 raise ValueError(text)
@@ -89,7 +121,7 @@ Mistake => Not working index."
             # data in db
             working_attrib = [view for view in attrib_list if view]
             if len(working_attrib) == 0:
-                text = f"[{Lybrary_Author.update_one.__name__}] \
+                text = f"[{Lybrary_Person.update_one.__name__}] \
 Mistake => Object not found, was"
                 log.info(text)
                 raise ValueError(text)
@@ -109,26 +141,27 @@ was updated")
             log.info(status_text.join("Db was updated"))
             status = True
         except Exception as e:
-            log.info(f"[{Lybrary_Author.update_one.__name__}] \
+            log.info(f"[{Lybrary_Person.update_one.__name__}] \
 Mistake => {e.__str__()}")
         finally:
             self.close()
-            log.info(f"[{Lybrary_Author.update_one.__name__}] END. \
+            log.info(f"[{Lybrary_Person.update_one.__name__}] END. \
 It all was  {status} ")
             return status
     def remove_one(self, index: int) -> bool:
         """
         TODO: Delete an one object  from db.  
-        :param index: int. THis is the author's ID.
+        :param index: int. THis is the model's ID.
         :return: 'True' meaning what the object removed from db. Or Not
         """
-        log.info(f"[{Lybrary_Author.remove_one.__name__}] START")
-        status_text = f"[{Lybrary_Author.remove_one}] \
+        log.info(f"[{Lybrary_Person.remove_one.__name__}] START")
+        status_text = f"[{Lybrary_Person.remove_one}] \
 Mistake => Not working index."
         status = False
         try:
             # get data from db
-            authors = self.session(Author).query.filter_by(id=index).first()
+            Model = self.get_model_name()
+            authors = self.session(Model).query.filter_by(id=index).first()
             if authors:
                 log.info(status_text)
                 raise ValueError(status_text)
@@ -140,7 +173,7 @@ Mistake => Not working index."
                 "Mistake => all went very well. Meaning is the True"
             )
         except Exception as e:
-            status_text = f"[{Lybrary_Author.remove_one}] \
+            status_text = f"[{Lybrary_Person.remove_one}] \
 Mistake => {e.__str__()}"
         finally:
             log.info(status_text)
