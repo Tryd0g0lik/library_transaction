@@ -87,13 +87,20 @@ Mistake => {e.__str__()}")
 Mistake => Object not found, was"
                 log.info(text)
                 raise ValueError(text)
+            status_text = ''
             if new_firstname_:
                 authors.firstname = new_firstname_
+                status_text = ''.join(" Meaning this 'firstname' was updated.")
             if new_secondname_:
                 authors.secondname = new_secondname_
+                status_text = status_text.join(" Meaning this 'secondname' \
+was updated")
             if new_birthday_:
                 authors.birthday = new_birthday_
+                status_text = status_text.join(" Meaning this 'birthday' \
+was updated")
             self.session.commit()
+            log.info(status_text.join("Db was updated"))
             status = True
         except Exception as e:
             log.info(f"[{Lybrary_Author.update.__name__}] \
