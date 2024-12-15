@@ -29,7 +29,7 @@ class Lybrary_Person(Library_basis):
         """
         super().__init__()
         self.__model_name = model_name
-    
+
     def get_model_name(self) -> Type[Union[Author, Client]]:
         """
         TODO: Receives a value from a private variable. This a variable 
@@ -37,6 +37,7 @@ class Lybrary_Person(Library_basis):
         :return: Type[Union[Author, Client]]
         """
         return self.__model_name
+
     def add_one(self, firstname_:str,
             secondname_:str,
             birthday_: datetime = datetime.utcnow) -> bool:
@@ -91,12 +92,12 @@ Mistake => {e.__str__()}")
             self.close()
             log.info(f"[{Lybrary_Person.get_one.__name__}] END")
             
-    def update_one(self, index:int, new_firstname_:[str, None]=None,
+    def update(self, index:int, new_firstname_:[str, None]=None,
             new_secondname_:[str, None] = None,
             new_birthday_:[str, None]=None) -> bool:
         """
         TODO: New data, we receive for entrypoint, for update the model's data \
-            from tabular db's model. From entrypoint we can receive one \
+            from tabel db. From entrypoint we can receive one \
             or more variables.
         :param index: int. The person's ID from db.
         :param new_firstname_: str. The new person's firstname.
@@ -105,14 +106,14 @@ Mistake => {e.__str__()}")
         :return: bool. 'True' it means what an everyone attributes went \
         the everyone processing the very well. Or not
         """
-        log.info(f"[{Lybrary_Person.update_one.__name__}] START")
+        log.info(f"[{Lybrary_Person.update.__name__}] START")
         status = False
         try:
             # get data from db
             Model = self.get_model_name()
             authors = self.session(Model).query.filter_by(id=index).first()
             if authors:
-                text = f"[{Lybrary_Person.update_one.__name__}] \
+                text = f"[{Lybrary_Person.update.__name__}] \
 Mistake => Not working index."
                 log.info(text)
                 raise ValueError(text)
@@ -121,7 +122,7 @@ Mistake => Not working index."
             # data in db
             working_attrib = [view for view in attrib_list if view]
             if len(working_attrib) == 0:
-                text = f"[{Lybrary_Person.update_one.__name__}] \
+                text = f"[{Lybrary_Person.update.__name__}] \
 Mistake => Object not found, was"
                 log.info(text)
                 raise ValueError(text)
@@ -141,11 +142,11 @@ was updated")
             log.info(status_text.join("Db was updated"))
             status = True
         except Exception as e:
-            log.info(f"[{Lybrary_Person.update_one.__name__}] \
+            log.info(f"[{Lybrary_Person.update.__name__}] \
 Mistake => {e.__str__()}")
         finally:
             self.close()
-            log.info(f"[{Lybrary_Person.update_one.__name__}] END. \
+            log.info(f"[{Lybrary_Person.update.__name__}] END. \
 It all was  {status} ")
             return status
     def remove_one(self, index: int) -> bool:

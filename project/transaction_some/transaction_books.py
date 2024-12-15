@@ -1,0 +1,2 @@
+созздать модель по аналогу
+project/transaction_some/ratnsaction_authors.py

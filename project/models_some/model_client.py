@@ -1,7 +1,7 @@
-from project.models_some.model_autors import Authors
+from project.models_some.model_autors import Author
 
 
-class Client(Authors):
+class Client(Author):
     """
     TODO: This guys take books from a library
     :param firstname: str. Author's name.

@@ -1,21 +1,7 @@
 """ Decorater. This is a decorative function for an admin panel. """
 
-from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin
 from flask_login import LoginManager
-from flask_admin.contrib.fileadmin import FileAdmin
-
-from project.celeries.celery_tasks.status_transaction_task import \
-    start_first_celery_task
-from project.forms.transaction_sessions.edit_form import \
-    FormEditTransactionData
-from project.forms.user_sessions.edit_form import FormEditorUserData
-from project.forms.user_transactions_forms.edit_form import \
-    FormEditUser_TransactionData
-from project.models_more.model_transaction import Transaction
-from project.models_more.model_user import Users
-from project.models_more.model_user_transactions import User_Transaction
-from project.transactions import Bank
 
 
 # Decorator
@@ -44,8 +30,6 @@ def admin_pannel():
     """
     
     def wrapper(app_) -> dict:
-        # CELERY it's RUN TASK
-        start_first_celery_task()
         
         # FORM INTEGRATIONS to the ADMIN PANEL
         # class MyTransactionDate(ModelView):
