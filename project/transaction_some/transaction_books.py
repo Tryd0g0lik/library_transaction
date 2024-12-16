@@ -168,7 +168,7 @@ Mistake => {e.__str__()}"
 Index is invalid"
                 )
                 raise ValueError(text)
-            status = True
+            status = response
         except Exception as e:
             text = f"[{Lybrary_book.update.__name__}] \
   Mistake => {e.__str__()}"
