@@ -103,7 +103,7 @@ Mistake => {e.__str__()}")
         :param new_firstname_: str. The new person's firstname.
         :param new_secondname_: str.  The new person's secondname.
         :param new_birthday_:  The new person's datetime.
-        :return: bool. 'True' it means what an everyone attributes went \
+        :return: bool. 'True' it means what everyone attributes went \
         the everyone processing the very well. Or not
         """
         log.info(f"[{Lybrary_Person.update.__name__}] START")
