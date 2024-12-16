@@ -15,7 +15,7 @@ configure_logging(logging.INFO)
 
 class Library_basis:
     """
-    TODO:" This is basic class for a work with lybrary db.
+    TODO:" This is basic class for a work with Library db.
     """
     
     def __init__(self):

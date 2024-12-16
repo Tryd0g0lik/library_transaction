@@ -2,7 +2,7 @@
 Here, is a DYNAMICALLY class for work with tabular models from db.
 This tabular models it means the 'Author' and 'Client' models.
 To the entrypoint we receive only one model. It's  from 'Client' or 'Author'.
-Then, everyone methods from the Lybrary_Person's class has as common for
+Then, everyone methods from the Library_Person's class has as common for
 working with 'Author' and 'Client' models
 """
 from typing import (Type, Union)
@@ -16,7 +16,7 @@ configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
 
-class Lybrary_Person(Library_basis):
+class Library_Person(Library_basis):
     """
     Here, is a DYNAMICALLY class for work with tabular models from db.
     This tabular models it means the 'Author' and 'Client' models.
@@ -48,8 +48,8 @@ class Lybrary_Person(Library_basis):
         :param birthday_:  The person's datetime.
         :return: bool. 'True' it means was created new line of db or not.
         """
-        log.info(f"[{Lybrary_Person.add_one.__name__}] START")
-        text = f"[{Lybrary_Person.add_one.__name__}] END"
+        log.info(f"[{Library_Person.add_one.__name__}] START")
+        text = f"[{Library_Person.add_one.__name__}] END"
         status = False
         try:
             Model = self.get_model_name()
@@ -61,7 +61,7 @@ class Lybrary_Person(Library_basis):
             self.session.commit()
             status = True
         except Exception as e:
-            text = f"[{Lybrary_Person.add_one.__name__}]: \
+            text = f"[{Library_Person.add_one.__name__}]: \
 Mistake => {e.__str__()}"
         finally:
             # CLOSE THE SESSION
@@ -75,8 +75,8 @@ Mistake => {e.__str__()}"
         :param index: int. The person's ID from db
         :return: dict a one person from selected by 'id'.
         """
-        log.info(f"[{Lybrary_Person.get_one.__name__}] START")
-        text = f"[{Lybrary_Person.get_one.__name__}] END"
+        log.info(f"[{Library_Person.get_one.__name__}] START")
+        text = f"[{Library_Person.get_one.__name__}] END"
         try:
             Model = self.get_model_name()
             model = self.session(Model).query.filter_by(id=index).first()
@@ -87,7 +87,7 @@ Mistake => {e.__str__()}"
             return model
                 
         except Exception as e:
-            text = f"[{Lybrary_Person.get_one.__name__}] \
+            text = f"[{Library_Person.get_one.__name__}] \
 Mistake => {e.__str__()}"
         finally:
             self.close()
@@ -107,8 +107,8 @@ Mistake => {e.__str__()}"
         :return: bool. 'True' it means what everyone attributes went \
         the everyone processing the very well. Or not
         """
-        log.info(f"[{Lybrary_Person.update.__name__}] START")
-        text = f"[{Lybrary_Person.update.__name__}]"
+        log.info(f"[{Library_Person.update.__name__}] START")
+        text = f"[{Library_Person.update.__name__}]"
         status = False
         try:
             # get data from db
@@ -142,7 +142,7 @@ was updated.")
             text = text.join("Db was updated. END")
             status = True
         except Exception as e:
-            text = f"[{Lybrary_Person.update.__name__}] \
+            text = f"[{Library_Person.update.__name__}] \
 Mistake => {e.__str__()}"
         finally:
             self.close()
@@ -155,8 +155,8 @@ Mistake => {e.__str__()}"
         :return: 'True' meaning what the object removed from db. Or \
         Not if 'False'
         """
-        log.info(f"[{Lybrary_Person.remove_one.__name__}] START")
-        text = f"[{Lybrary_Person.remove_one.__name__}]"
+        log.info(f"[{Library_Person.remove_one.__name__}] START")
+        text = f"[{Library_Person.remove_one.__name__}]"
         status = False
         try:
             # get data from db
@@ -169,7 +169,7 @@ Index is invalid")
                 raise ValueError(text)
             status = True
         except Exception as e:
-            text = f"[{Lybrary_Person.update.__name__}] \
+            text = f"[{Library_Person.update.__name__}] \
 Mistake => {e.__str__()}"
         finally:
             self.close()
@@ -181,8 +181,8 @@ Mistake => {e.__str__()}"
 #         :return: 'True' meaning what the object removed from db. Or \
 #         Not if 'False'
 #         """
-#         log.info(f"[{Lybrary_Person.remove_one.__name__}] START")
-#         status_text = f"[{Lybrary_Person.remove_one.__name__}] \
+#         log.info(f"[{Library_Person.remove_one.__name__}] START")
+#         status_text = f"[{Library_Person.remove_one.__name__}] \
 # Mistake => Not working index."
 #         status = False
 #         try:
@@ -200,7 +200,7 @@ Mistake => {e.__str__()}"
 #                 "Mistake => all went very well. Meaning is the True"
 #             )
 #         except Exception as e:
-#             status_text = f"[{Lybrary_Person.remove_one.__name__}] \
+#             status_text = f"[{Library_Person.remove_one.__name__}] \
 # Mistake => {e.__str__()}"
 #         finally:
 #             log.info(status_text)

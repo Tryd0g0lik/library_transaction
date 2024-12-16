@@ -7,12 +7,12 @@ from project.models_some.model_autors import Author
 from project.models_some.model_book import Book
 from project.transaction_some.transactin_basic import Library_basis
 from project.logs import configure_logging
-from project.transaction_some.transaction_person import Lybrary_Person
+from project.transaction_some.transaction_person import Library_Person
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
-class Lybrary_book(Library_basis):
+class Library_book(Library_basis):
     
     def add_one(self,
                 title_: str,
@@ -30,15 +30,15 @@ class Lybrary_book(Library_basis):
         :param quantity_: int.
         :return:
         """
-        log.info(f"[{Lybrary_book.add_one.__name__}] START")
+        log.info(f"[{Library_book.add_one.__name__}] START")
         status = False
-        text=f"[{Lybrary_book.add_one.__name__}] END"
+        text=f"[{Library_book.add_one.__name__}] END"
         try:
-            person = Lybrary_Person(Author)
+            person = Library_Person(Author)
             author = person.get_one(author_id_)
             
             if not author:
-                text = f"[{Lybrary_book.add_one.__name__}] \
+                text = f"[{Library_book.add_one.__name__}] \
 Mistake => Not found the author. 'author_id' is invalid."
                 raise ValueError(text)
             
@@ -52,7 +52,7 @@ Mistake => Not found the author. 'author_id' is invalid."
             self.session.commit()
             status = True
         except Exception as e:
-            text = f"[{Lybrary_book.add_one.__name__}]: \
+            text = f"[{Library_book.add_one.__name__}]: \
 Mistake => {e.__str__()}"
         finally:
             self.close()
@@ -65,19 +65,19 @@ Mistake => {e.__str__()}"
         :param index: int. The book's ID from db
         :return: object a one book from selected by 'id' or bool data.
         """
-        log.info(f"[{Lybrary_book.get_one.__name__}] START")
+        log.info(f"[{Library_book.get_one.__name__}] START")
         text = "END"
         status = False
         try:
             book = self.session(Book).query.filter_by(id=index).first()
             if not book:
-                text = f"[{Lybrary_book.get_one.__name__}] \
+                text = f"[{Library_book.get_one.__name__}] \
  Mistake => Not found the book's ID. Index is invalid."
                 raise ValueError(text)
             status = book
     
         except Exception as e:
-            text = f"[{Lybrary_book.get_one.__name__}] \
+            text = f"[{Library_book.get_one.__name__}] \
  Mistake => {e.__str__()}"
         
         finally:
@@ -102,8 +102,8 @@ Mistake => {e.__str__()}"
         :return: bool. 'True' it means what everyone attributes went \
         the everyone processing the very well. Or not
         """
-        log.info(f"[{Lybrary_book.update.__name__}] START")
-        text = f"[{Lybrary_book.update.__name__}]"
+        log.info(f"[{Library_book.update.__name__}] START")
+        text = f"[{Library_book.update.__name__}]"
         status = False
         try:
             # get data from db
@@ -118,10 +118,10 @@ Mistake => Not working index. Index is invalid"
             # data in db
             working_attrib = [view for view in attrib_list if view]
             if len(working_attrib) == 0:
-                text = f"[{Lybrary_book.update.__name__}] \
+                text = f"[{Library_book.update.__name__}] \
 Mistake => Object not found, was"
                 raise ValueError(text)
-            status_text = f"[{Lybrary_book.update.__name__}]"
+            status_text = f"[{Library_book.update.__name__}]"
             if new_title_:
                 book.title = new_title_
                 status_text = status_text.join(" Meaning this 'title' \
@@ -142,7 +142,7 @@ was updated")
             text = status_text.join("Db was updated. END")
             status = True
         except Exception as e:
-            text = f"[{Lybrary_book.update.__name__}] \
+            text = f"[{Library_book.update.__name__}] \
 Mistake => {e.__str__()}"
         finally:
             self.close()
@@ -156,8 +156,8 @@ Mistake => {e.__str__()}"
         :return: 'True' meaning what the object removed from db. Or \
         Not if 'False'
         """
-        log.info(f"[{Lybrary_book.remove_one.__name__}] START")
-        text = f"[{Lybrary_book.remove_one.__name__}] END"
+        log.info(f"[{Library_book.remove_one.__name__}] START")
+        text = f"[{Library_book.remove_one.__name__}] END"
         status = False
         try:
             # get data from db
@@ -170,7 +170,7 @@ Index is invalid"
                 raise ValueError(text)
             status = response
         except Exception as e:
-            text = f"[{Lybrary_book.update.__name__}] \
+            text = f"[{Library_book.update.__name__}] \
   Mistake => {e.__str__()}"
         finally:
             self.close()
@@ -184,22 +184,22 @@ Index is invalid"
 # #         :return: 'True' meaning what the object removed from db. Or
 # #         Not if 'False'
 # #         """
-# #         log.info(f"[{Lybrary_book.remove_one.__name__}] START")
+# #         log.info(f"[{Library_book.remove_one.__name__}] START")
 # #
-# #         text = f"[{Lybrary_book.remove_one.__name__}] END"
+# #         text = f"[{Library_book.remove_one.__name__}] END"
 # #         status = False
 # #         try:
 # #             # get data from db
 # #             authors = self.session(Book).query.filter_by(id=index).first()
 # #             if authors:
-# #                 text = f"[{Lybrary_book.remove_one.__name__}] \
+# #                 text = f"[{Library_book.remove_one.__name__}] \
 # # Mistake => Not working index."
 # #                 raise ValueError(text)
 # #             authors.delete()
 # #             self.session.commit()
 # #             status = True
 # #         except Exception as e:
-# #             f"[{Lybrary_book.remove_one.__name__}] \
+# #             f"[{Library_book.remove_one.__name__}] \
 # # Mistake => {e.__str__()}"
 # #         finally:
 # #             self.close()
