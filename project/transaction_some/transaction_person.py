@@ -92,7 +92,7 @@ Mistake => {e.__str__()}")
             self.close()
             log.info(f"[{Lybrary_Person.get_one.__name__}] END")
             
-    def update(self, index:int, new_firstname_:[str, None]=None,
+    def update(self, index:int, new_firstname_:[str, None] = None,
             new_secondname_:[str, None] = None,
             new_birthday_:[str, None]=None) -> bool:
         """
