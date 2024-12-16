@@ -1,7 +1,11 @@
+"""
+Here is a logic for work with the db Book's transactions .
+This is a management for control
+"""
+import logging
 from project.models_some.model_autors import Author
 from project.models_some.model_book import Book
 from project.transaction_some.transactin_basic import Library_basis
-import logging
 from project.logs import configure_logging
 from project.transaction_some.transaction_person import Lybrary_Person
 
@@ -144,34 +148,62 @@ Mistake => {e.__str__()}"
             self.close()
             log.info(text)
             return status
-        
-    def remove_one(self, index: int) -> bool:
+
+    def removing(self, index: int) -> bool:
         """
         TODO: Delete an one db's line from db.
-        :param index: int. THis is the book's ID.
-        :return: 'True' meaning what the object removed from db. Or
+        :param index: int. THis is the model's ID.
+        :return: 'True' meaning what the object removed from db. Or \
         Not if 'False'
         """
         log.info(f"[{Lybrary_book.remove_one.__name__}] START")
-        
         text = f"[{Lybrary_book.remove_one.__name__}] END"
         status = False
         try:
             # get data from db
-            authors = self.session(Book).query.filter_by(id=index).first()
-            if authors:
-                text = f"[{Lybrary_book.remove_one.__name__}] \
-Mistake => Not working index."
+            response: bool = self.remove_one(index, Book)
+            if not response:
+                text = text.join(
+                    " Mistake => Not working index. \
+Index is invalid"
+                )
                 raise ValueError(text)
-            authors.delete()
-            self.session.commit()
             status = True
         except Exception as e:
-            f"[{Lybrary_book.remove_one.__name__}] \
-Mistake => {e.__str__()}"
+            text = f"[{Lybrary_book.update.__name__}] \
+  Mistake => {e.__str__()}"
         finally:
             self.close()
             log.info(text)
             return status
+            
+#     def remove_one(self, index: int) -> bool:
+# #         """
+# #         TODO: Delete an one db's line from db.
+# #         :param index: int. THis is the book's ID.
+# #         :return: 'True' meaning what the object removed from db. Or
+# #         Not if 'False'
+# #         """
+# #         log.info(f"[{Lybrary_book.remove_one.__name__}] START")
+# #
+# #         text = f"[{Lybrary_book.remove_one.__name__}] END"
+# #         status = False
+# #         try:
+# #             # get data from db
+# #             authors = self.session(Book).query.filter_by(id=index).first()
+# #             if authors:
+# #                 text = f"[{Lybrary_book.remove_one.__name__}] \
+# # Mistake => Not working index."
+# #                 raise ValueError(text)
+# #             authors.delete()
+# #             self.session.commit()
+# #             status = True
+# #         except Exception as e:
+# #             f"[{Lybrary_book.remove_one.__name__}] \
+# # Mistake => {e.__str__()}"
+# #         finally:
+# #             self.close()
+# #             log.info(text)
+# #             return status
         
         
