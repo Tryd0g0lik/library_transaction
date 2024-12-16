@@ -70,7 +70,7 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
         
-    def receive(self, index: int) -> type[Author | Client]:
+    def receive(self, index: int = None) -> type[Author | Client]:
         """
         TODO: Select tne one person from the 'Model' db's table.
         :param index: int. The person's ID from db
@@ -81,14 +81,17 @@ Mistake => {e.__str__()}"
         
         try:
             Model = self.get_model_name()
-            # model = self.session(Model).query.filter_by(id=index).first()
-            model = self.get_one(index, Model)
-            if not model:
-                text = text.join(
-                    " Mistake => Not working index. Index is invalid")
-                raise ValueError(text)
-            return model
-
+            if index:
+                # model = self.session(Model).query.filter_by(id=index).first()
+                model = self.get_one(index, Model)
+                if not model:
+                    text = text.join(
+                        " Mistake => Not working index. Index is invalid")
+                    raise ValueError(text)
+                return model
+            # get all
+            models = self.get_one(Model)
+            return models
         except Exception as e:
             text = f"[{Library_Person.get_one.__name__}] \
 Mistake => {e.__str__()}"

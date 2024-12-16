@@ -73,25 +73,29 @@ class Library_basis:
             log.info(text)
             return status
 
-    def get_one(self, index: int,
+    def get_one(self, index: [int, None],
                 Model: type[Author | Client | Book| Borrow]
                 ) -> type[Author | Client | Book| Borrow | bool]:
         """
         TODO: By an index, be to select tne one book from the 'Model' db's table.
-        :param index: int. The model's ID from db
-        :return: object a one model from selected by 'id' or bool data.
+        :param index: [int, None]. The model's ID from db
+        :return: object a one model from selected by 'id', the all models if
+        an index = None or bool data.
         """
         log.info(f"[{Library_basis.get_one.__name__}] START")
         text = f"[{Library_basis.get_one.__name__}]"
         status = False
         try:
-            book = self.session(Model).query.filter_by(id=index).first()
-            if not book:
-                text = text.join(f" Mistake => Not found the model's ID. \
-Index is invalid.")
-                raise ValueError(text)
-            status = book
-    
+            if index:
+                book = self.session(Model).query.filter_by(id=index).first()
+                if not book:
+                    text = text.join(f" Mistake => Not found the model's ID. \
+    Index is invalid.")
+                    raise ValueError(text)
+                status = book
+            else:
+                books = self.session(Model).query.all()
+                status = books
         except Exception as e:
             text = text.join(f" Mistake => {e.__str__()}")
             raise ValueError(text)
@@ -99,3 +103,4 @@ Index is invalid.")
             self.close()
             log.info(text)
             return status
+        
