@@ -52,7 +52,7 @@ def create_flask() -> Dict[str, Any]:
     }
 
 
-flask_dict = create_flask
+flask_dict = create_flask()
 app_ = flask_dict["app"]
 csrf = flask_dict["csrf"]
 bcrypt = flask_dict["bcrypt"]

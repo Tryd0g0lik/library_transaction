@@ -23,4 +23,4 @@ class Borrow(Base):
     
     def __str__(self):
         return f"Person ID: {self.book_id}, Person firstname: {self.date_borrow} \
-        Person birthday: {self.date_return}"
+Person birthday: {self.date_return}"
