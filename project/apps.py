@@ -9,11 +9,11 @@ from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.routing import BaseConverter
 
-from project.admins import admin_pannel
+# from project.admins import admin_pannel
 from dotenv_ import (SECRET_KEY, DSN, )
 
 
-@admin_pannel()
+# @admin_pannel()
 def create_flask() -> Dict[str, Any]:
     """
     Creating the app flask
