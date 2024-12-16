@@ -106,11 +106,11 @@ Index is invalid")
 Mistake => Not working index. Index is invalid"
                 raise ValueError(text)
             attrib_list = [book_id_, client_id_,
-                date_borrow_]
+                date_borrow_, date_return_]
             # Here, need to find working attributes then will be change
             # data in db
             working_attrib = [view for view in attrib_list if view]
-            if len(working_attrib) == 0 and date_return_ == datetime.utcnow:
+            if len(working_attrib) == 0:
                 text = f"[{Library_Borrow.update.__name__}] \
 Mistake => Object not found, was"
                 raise ValueError(text)
