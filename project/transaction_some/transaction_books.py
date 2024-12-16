@@ -3,7 +3,7 @@ from project.models_some.model_book import Book
 from project.transaction_some.transactin_basic import Library_basis
 import logging
 from project.logs import configure_logging
-
+from project.transaction_some.transaction_person import Lybrary_Person
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class Lybrary_book(Library_basis):
         status = False
         text=f"[{Lybrary_book.add_one.__name__}] END"
         try:
-            person = Lybrary_book(Author)
+            person = Lybrary_Person(Author)
             author = person.get_one(author_id_)
             
             if not author:
@@ -90,7 +90,7 @@ Mistake => {e.__str__()}"
         TODO: New data, we receive from entrypoint, for update the Book's data, \
             from tabel db. From entrypoint we can receive one \
             or more variables.
-        :param index: int. The person's ID from db.
+        :param index: int. The book's ID from db.
         :param new_title_: str. The new book's title.
         :param new_descriptions_: str.  The new book's descriptions.
         :param new_author_id_: int.  The new book's author.
@@ -99,13 +99,13 @@ Mistake => {e.__str__()}"
         the everyone processing the very well. Or not
         """
         log.info(f"[{Lybrary_book.update.__name__}] START")
-        text = f"[{Lybrary_book.update.__name__}] END"
+        text = f"[{Lybrary_book.update.__name__}]"
         status = False
         try:
             # get data from db
             book = self.session(Book).query.filter_by(id=index).first()
             if book:
-                text = f"[{Lybrary_book.update.__name__}] \
+                text = f"[{text} \
 Mistake => Not working index. Index is invalid"
                 raise ValueError(text)
             attrib_list = [new_title_, new_descriptions_,
@@ -135,7 +135,7 @@ was updated")
                 status_text = status_text.join(" Meaning this 'quantity' \
 was updated")
             self.session.commit()
-            text = status_text.join("Db was updated")
+            text = status_text.join("Db was updated. END")
             status = True
         except Exception as e:
             text = f"[{Lybrary_book.update.__name__}] \
