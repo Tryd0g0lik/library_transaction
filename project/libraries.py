@@ -3,7 +3,7 @@ Here is a logic for work with db.
 This is a management for control the books
 """
 
-from project.models import Books, get_session
+from project.models import Book, get_session
 
 
 class Library:
@@ -42,7 +42,7 @@ class Library:
             )
             return False
         try:
-            new_book = Books(title=title,
+            new_book = Book(title=title,
                              author=author,
                              year=year,
                              status=status)
@@ -62,7 +62,7 @@ class Library:
         status = False
         status_text = "None"
         try:
-            book = self.session.query(Books).filter_by(id=int(book_id)).first()
+            book = self.session.query(Book).filter_by(id=int(book_id)).first()
             if book:
                 self.session.delete(book)
                 self.session.commit()
@@ -91,12 +91,12 @@ class Library:
         """
         try:
             results: list = (
-                self.session.query(Books)
+                self.session.query(Book)
                 .filter(
-                    (Books.title.ilike(f"%{search_term}%"))
-                    | (Books.author.ilike(f"%{search_term}%"))
+                    (Book.title.ilike(f"%{search_term}%"))
+                    | (Book.author.ilike(f"%{search_term}%"))
                     | (
-                        Books.year == int(search_term)
+                        Book.year == int(search_term)
                         if search_term.isdigit()
                         else False
                     )
@@ -116,7 +116,7 @@ class Library:
         """
         status = False
         try:
-            books = self.session.query(Books).all()
+            books = self.session.query(Book).all()
             if not books:
                 print("[Library]: Нет доступных книг.")
             for book in books:
@@ -146,7 +146,7 @@ class Library:
             return status
 
         try:
-            book = self.session.query(Books).filter_by(id=int(book_id)).first()
+            book = self.session.query(Book).filter_by(id=int(book_id)).first()
             if not book:
                 print(f"[Library]: Книга с ID {book_id}\
  не найдена. Проверьте ID")
