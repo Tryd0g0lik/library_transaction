@@ -11,4 +11,6 @@ class Client(Author):
     __tablename__ = "clients"
     pass
 
-    
+    def __str__(self):
+        return f"Person ID: {self.id}, Person firstname: {self.firstname} \
+        Person birthday: {self.birthday}"

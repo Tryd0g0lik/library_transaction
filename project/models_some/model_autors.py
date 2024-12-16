@@ -14,3 +14,7 @@ class Author(Person):
     __tablename__ = "authors"
     
     secondname = Column(String(35), nullable=False)
+    
+    def __str__(self):
+        return f"Person ID: {self.id}, Person firstname: {self.firstname} \
+        Person birthday: {self.birthday}"

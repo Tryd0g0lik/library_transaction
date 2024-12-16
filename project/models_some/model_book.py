@@ -20,3 +20,7 @@ class Book(Base):
     author_id = Column(Integer, ForeignKey("authors.id")),
     quantity = Column(Integer, nullable=False, default=0)
     authors = relationship("Authors", backref="authors")
+    
+    def __str__(self):
+        return f"Person ID: {self.id}, Person firstname: {self.title} \
+        Person birthday: {self.quantity}"

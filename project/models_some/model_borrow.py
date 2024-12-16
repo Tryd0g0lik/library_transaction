@@ -7,13 +7,16 @@ from sqlalchemy.orm import relationship
 from project.models_some.model_init import Base
 
 
-class Borrows(Base):
+class Borrow(Base):
     """Borrows books"""
     __tablename__ = "borrows"
-    books_id = Column(Integer, ForeignKey("books.id"), nullable=False)
+    book_id = Column(Integer, ForeignKey("books.id"), nullable=False)
     client_id = Column(String, ForeignKey("clients.firstname"), nullable=False)
-    date_borrows = Column(DateTime, default=datetime.utcnow)
+    date_borrow = Column(DateTime, default=datetime.utcnow)
     date_return = Column(DateTime)
     books = relationship("Books", backref="books")
     clients = relationship("CLients", backref="clients")
     
+    def __str__(self):
+        return f"Person ID: {self.book_id}, Person firstname: {self.date_borrow} \
+        Person birthday: {self.date_return}"
