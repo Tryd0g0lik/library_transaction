@@ -3,7 +3,7 @@ from project.models_some.model_book import Book
 from project.transaction_some.transactin_basic import Library_basis
 import logging
 from project.logs import configure_logging
-from project.transaction_some.transaction_person import Lybrary_Person
+
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class Lybrary_book(Library_basis):
         status = False
         text=f"[{Lybrary_book.add_one.__name__}] END"
         try:
-            person = Lybrary_Person(Author)
+            person = Lybrary_book(Author)
             author = person.get_one(author_id_)
             
             if not author:
@@ -67,7 +67,7 @@ Mistake => {e.__str__()}"
         try:
             book = self.session(Book).query.filter_by(id=index).first()
             if not book:
-                text = f"[{Lybrary_Person.get_one.__name__}] \
+                text = f"[{Lybrary_book.get_one.__name__}] \
  Mistake => Not found the book's ID. Index is invalid."
                 raise ValueError(text)
             status = book
@@ -83,7 +83,7 @@ Mistake => {e.__str__()}"
     
     def update(self,index:int, new_title_: type[str | None ] = None,
                new_descriptions_: type[str | None] = None,
-               new_author_: type[int | None] = None,
+               new_author_id_: type[int | None] = None,
                new_quantity_: type[int | None] = None
                ) -> bool:
         """
@@ -91,32 +91,33 @@ Mistake => {e.__str__()}"
             from tabel db. From entrypoint we can receive one \
             or more variables.
         :param index: int. The person's ID from db.
-        :param new_firstname_: str. The new person's firstname.
-        :param new_secondname_: str.  The new person's secondname.
-        :param new_birthday_:  The new person's datetime.
+        :param new_title_: str. The new book's title.
+        :param new_descriptions_: str.  The new book's descriptions.
+        :param new_author_id_: int.  The new book's author.
+        :param new_quantity_: int.  The new book's quantity.
         :return: bool. 'True' it means what everyone attributes went \
         the everyone processing the very well. Or not
         """
-        log.info(f"[{Lybrary_Person.update.__name__}] START")
-        text = f"[{Lybrary_Person.update.__name__}] END"
+        log.info(f"[{Lybrary_book.update.__name__}] START")
+        text = f"[{Lybrary_book.update.__name__}] END"
         status = False
         try:
             # get data from db
             book = self.session(Book).query.filter_by(id=index).first()
             if book:
-                text = f"[{Lybrary_Person.update.__name__}] \
+                text = f"[{Lybrary_book.update.__name__}] \
 Mistake => Not working index. Index is invalid"
                 raise ValueError(text)
             attrib_list = [new_title_, new_descriptions_,
-                           new_author_, new_quantity_]
+                           new_author_id_, new_quantity_]
             # Here, need to find working attributes then will be change
             # data in db
             working_attrib = [view for view in attrib_list if view]
             if len(working_attrib) == 0:
-                text = f"[{Lybrary_Person.update.__name__}] \
+                text = f"[{Lybrary_book.update.__name__}] \
 Mistake => Object not found, was"
                 raise ValueError(text)
-            status_text = f"[{Lybrary_Person.update.__name__}]"
+            status_text = f"[{Lybrary_book.update.__name__}]"
             if new_title_:
                 book.title = new_title_
                 status_text = status_text.join(" Meaning this 'title' \
@@ -125,8 +126,8 @@ was updated.")
                 book.descriptions = new_descriptions_
                 status_text = status_text.join(" Meaning this 'description' \
 was updated")
-            if new_author_:
-                book.authors = new_author_
+            if new_author_id_:
+                book.author_id = new_author_id_
                 status_text = status_text.join(" Meaning this 'authors \
 was updated")
             if new_quantity_:
@@ -137,12 +138,40 @@ was updated")
             text = status_text.join("Db was updated")
             status = True
         except Exception as e:
-            text = f"[{Lybrary_Person.update.__name__}] \
+            text = f"[{Lybrary_book.update.__name__}] \
 Mistake => {e.__str__()}"
         finally:
             self.close()
             log.info(text)
             return status
         
+    def remove_one(self, index: int) -> bool:
+        """
+        TODO: Delete an one db's line from db.
+        :param index: int. THis is the book's ID.
+        :return: 'True' meaning what the object removed from db. Or
+        Not if 'False'
+        """
+        log.info(f"[{Lybrary_book.remove_one.__name__}] START")
+        
+        text = f"[{Lybrary_book.remove_one.__name__}] END"
+        status = False
+        try:
+            # get data from db
+            authors = self.session(Book).query.filter_by(id=index).first()
+            if authors:
+                text = f"[{Lybrary_book.remove_one.__name__}] \
+Mistake => Not working index."
+                raise ValueError(text)
+            authors.delete()
+            self.session.commit()
+            status = True
+        except Exception as e:
+            f"[{Lybrary_book.remove_one.__name__}] \
+Mistake => {e.__str__()}"
+        finally:
+            self.close()
+            log.info(text)
+            return status
         
         

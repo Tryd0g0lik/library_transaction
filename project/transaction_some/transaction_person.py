@@ -151,12 +151,13 @@ It all was  {status} ")
             return status
     def remove_one(self, index: int) -> bool:
         """
-        TODO: Delete an one object  from db.  
+        TODO: Delete an one db's line from db.
         :param index: int. THis is the model's ID.
-        :return: 'True' meaning what the object removed from db. Or Not
+        :return: 'True' meaning what the object removed from db. Or \
+        Not if 'False'
         """
         log.info(f"[{Lybrary_Person.remove_one.__name__}] START")
-        status_text = f"[{Lybrary_Person.remove_one}] \
+        status_text = f"[{Lybrary_Person.remove_one.__name__}] \
 Mistake => Not working index."
         status = False
         try:
@@ -174,7 +175,7 @@ Mistake => Not working index."
                 "Mistake => all went very well. Meaning is the True"
             )
         except Exception as e:
-            status_text = f"[{Lybrary_Person.remove_one}] \
+            status_text = f"[{Lybrary_Person.remove_one.__name__}] \
 Mistake => {e.__str__()}"
         finally:
             log.info(status_text)
