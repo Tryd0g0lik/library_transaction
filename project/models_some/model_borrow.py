@@ -9,7 +9,8 @@ from project.models_some.model_init import Base
 
 class Borrow(Base):
     """Borrows books"""
-    __tablename__ = "borrows"
+    __tablename__ = "borrow"
+    id = Column(Integer, primary_key=True)
     book_id = Column(Integer, ForeignKey("books.id",
                                          ondelete="CASCADE"),
                      nullable=False)

@@ -9,7 +9,7 @@ class Client(Author):
     :param birthday: datetime.
     """
     __tablename__ = "clients"
-    pass
+    
 
     def __str__(self):
         return f"Person ID: {self.id}, Person firstname: {self.firstname} \

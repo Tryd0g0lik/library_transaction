@@ -21,7 +21,7 @@ class Library_Person(Library_basis):
     Here, is a DYNAMICALLY class for work with tabular models from db.
     This tabular models it means the 'Author' and 'Client' models.
     """
-    def __init__(self,  model_name: type[Union[Author, Client]]):
+    def __init__(self,  model_name: [Author, Client]):
         """
         TODO: To the entrypoint we receive only one model. It's  
             from 'Client' or 'Author'.
@@ -30,7 +30,7 @@ class Library_Person(Library_basis):
         super().__init__()
         self.__model_name = model_name
 
-    def get_model_name(self) -> type[Union[Author, Client]]:
+    def get_model_name(self) -> [Author, Client]:
         """
         TODO: Receives a value from a private variable. This a variable 
             means the 'Author' and 'Client' models
@@ -40,7 +40,7 @@ class Library_Person(Library_basis):
 
     def add_one(self, firstname_:str,
             secondname_:str,
-            birthday_: datetime = datetime.utcnow) -> bool:
+            birthday_: datetime = None) -> bool:
         """
         TODO: New model's line adds to the Model db's table
         :param firstname_: str. The person's firstname.
@@ -55,7 +55,8 @@ class Library_Person(Library_basis):
             Model = self.get_model_name()
             model = Model(firstname=firstname_,
                             secondname=secondname_,
-                            birthday=birthday_
+                            birthday=birthday_ if birthday_ else
+datetime.utcnow()
                             )
             self.session.add(model)
             self.session.commit()

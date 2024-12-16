@@ -14,12 +14,12 @@ class Book(Base):
     """
 
     __tablename__ = "books"
-
+    id = Column(Integer, primary_key=True)
     title = Column(String(155), nullable=False, unique=True)
     descriptions = Column(Text(255))
     author_id = Column(Integer, ForeignKey("authors.id",
                                            ondelete="CASCADE"),
-                       nullable=False),
+                       nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
     authors = relationship("Authors", backref="authors")
     
