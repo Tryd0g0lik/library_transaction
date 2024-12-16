@@ -114,7 +114,7 @@ Mistake => {e.__str__()}")
             authors = self.session(Model).query.filter_by(id=index).first()
             if authors:
                 text = f"[{Lybrary_Person.update.__name__}] \
-Mistake => Not working index."
+Mistake => Not working index. Index is invalid"
                 log.info(text)
                 raise ValueError(text)
             attrib_list = [new_firstname_, new_secondname_, new_birthday_]
@@ -126,7 +126,7 @@ Mistake => Not working index."
 Mistake => Object not found, was"
                 log.info(text)
                 raise ValueError(text)
-            status_text = ''
+            status_text = f"[{Lybrary_Person.update.__name__}]"
             if new_firstname_:
                 authors.firstname = new_firstname_
                 status_text = ''.join(" Meaning this 'firstname' was updated.")
