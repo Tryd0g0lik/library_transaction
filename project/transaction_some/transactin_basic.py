@@ -39,6 +39,7 @@ class Library_basis:
         except Exception as e:
             log.info(f"[{__name__}]: Session was closed. Error => {e}")
 
+            raise ValueError(f"[{__name__}]: Session was closed. Error => {e}")
     def remove_one(self, index: int,
                    Model: type[Union[Author, Client, Book, Borrow]]) -> bool:
         """
@@ -64,8 +65,9 @@ class Library_basis:
             self.session.commit()
             status = True
         except Exception as e:
-            f"[{Library_basis.remove_one.__name__}] \
+            text = f"[{Library_basis.remove_one.__name__}] \
     Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)
@@ -92,7 +94,7 @@ Index is invalid.")
     
         except Exception as e:
             text = text.join(f" Mistake => {e.__str__()}")
-    
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)

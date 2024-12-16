@@ -52,7 +52,7 @@ class Library:
             return True
         except Exception as e:
             print(f"[Library]: 'add_books' Error => {e}")
-
+            raise ValueError(f"[Library]: 'add_books' Error => {e}")
     def remove_book(self, book_id: int) -> bool:
         """
         TODO: Here, we remove a book by book's index
@@ -78,6 +78,7 @@ class Library:
             status_text = status_text.replace(
                 "None", f"[Library]: 'remove_book' Error => {e}"
             )
+            raise ValueError(status_text)
         finally:
             print(f"[Library]: {status_text}")
             return status
@@ -105,6 +106,8 @@ class Library:
             return results
         except Exception as e:
             print(f"[Library]: 'find_books' Error => {e}")
+            raise ValueError(f"[Library]: 'find_books' Error => {e}")
+        finally:
             return False
 
     def display_books(self) -> bool:
@@ -124,6 +127,7 @@ class Library:
                 status = True
         except Exception as e:
             print(f"[Library]: 'find_books' Error => {e}")
+            raise ValueError(f"[Library]: 'find_books' Error => {e}")
         finally:
             return status
 
@@ -156,6 +160,7 @@ class Library:
             status = True
         except Exception as e:
             print(f"[Library]: Проверьте id книги. ERROR => {e}")
+            raise ValueError(f"[Library]: Проверьте id книги. ERROR => {e}")
         finally:
             return status
 
@@ -165,3 +170,4 @@ class Library:
             self.session.close()
         except Exception as e:
             print(f"[Library]: Библиотека закрыта. Error => {e}")
+            raise ValueError(f"[Library]: Библиотека закрыта. Error => {e}")

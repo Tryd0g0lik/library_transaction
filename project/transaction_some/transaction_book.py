@@ -54,6 +54,7 @@ Mistake => Not found the author. 'author_id' is invalid."
         except Exception as e:
             text = f"[{Library_book.add_one.__name__}]: \
 Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)
@@ -79,7 +80,7 @@ Mistake => {e.__str__()}"
         except Exception as e:
             text = f"[{Library_book.get_one.__name__}] \
  Mistake => {e.__str__()}"
-        
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)
@@ -95,10 +96,11 @@ Mistake => {e.__str__()}"
             from tabel db. From entrypoint we can receive one \
             or more variables.
         :param index: int. The book's ID from db.
-        :param new_title_: str. The new book's title.
+        :param new_title_: str. The new book's title. Default is 'None'.
         :param new_descriptions_: str.  The new book's descriptions.
-        :param new_author_id_: int.  The new book's author.
-        :param new_quantity_: int.  The new book's quantity.
+        Default is 'None'.
+        :param new_author_id_: int.  The new book's author. Default is 'None'.
+        :param new_quantity_: int.  The new book's quantity. Default is 'None'.
         :return: bool. 'True' it means what everyone attributes went \
         the everyone processing the very well. Or not
         """
@@ -139,11 +141,12 @@ was updated")
                 status_text = status_text.join(" Meaning this 'quantity' \
 was updated")
             self.session.commit()
-            text = status_text.join("Db was updated. END")
+            text = status_text.join("Db 'Book' was updated. END")
             status = True
         except Exception as e:
             text = f"[{Library_book.update.__name__}] \
 Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)
@@ -172,6 +175,7 @@ Index is invalid"
         except Exception as e:
             text = f"[{Library_book.update.__name__}] \
   Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)

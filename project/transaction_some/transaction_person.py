@@ -63,6 +63,7 @@ class Library_Person(Library_basis):
         except Exception as e:
             text = f"[{Library_Person.add_one.__name__}]: \
 Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             # CLOSE THE SESSION
             self.close()
@@ -105,8 +106,10 @@ Mistake => {e.__str__()}"
             or more variables.
         :param index: int. The person's ID from db.
         :param new_firstname_: str. The new person's firstname.
+        Default is 'None'
         :param new_secondname_: str.  The new person's secondname.
-        :param new_birthday_:  The new person's datetime.
+        Default is 'None'
+        :param new_birthday_:  The new person's datetime. Default is 'None'
         :return: bool. 'True' it means what everyone attributes went \
         the everyone processing the very well. Or not
         """
@@ -147,6 +150,7 @@ was updated.")
         except Exception as e:
             text = f"[{Library_Person.update.__name__}] \
 Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)
@@ -172,6 +176,7 @@ Index is invalid")
             status = True
         except Exception as e:
             text = text.join(f" Mistake => {e.__str__()}")
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)

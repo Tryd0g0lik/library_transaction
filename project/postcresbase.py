@@ -57,6 +57,7 @@ def create_database_if_not_exsists(db_name: str) -> bool:
             "None", f"[{create_database_if_not_exsists.__name__}] \
 Mistake {e.__str__()}"
         )
+        raise ValueError(status_text)
     finally:
         # CLOSE the connection
         cursor.close()
