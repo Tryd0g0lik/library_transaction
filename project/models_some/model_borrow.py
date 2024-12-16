@@ -10,8 +10,12 @@ from project.models_some.model_init import Base
 class Borrow(Base):
     """Borrows books"""
     __tablename__ = "borrows"
-    book_id = Column(Integer, ForeignKey("books.id"), nullable=False)
-    client_id = Column(String, ForeignKey("clients.firstname"), nullable=False)
+    book_id = Column(Integer, ForeignKey("books.id",
+                                         ondelete="CASCADE"),
+                     nullable=False)
+    client_id = Column(String, ForeignKey("clients.firstname",
+                                          ondelete="CASCADE"),
+                       nullable=False)
     date_borrow = Column(DateTime, default=datetime.utcnow)
     date_return = Column(DateTime)
     books = relationship("Books", backref="books")

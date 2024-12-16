@@ -69,7 +69,7 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
         
-    def get_one(self, index: int) -> type[Union[Author, Client]]:
+    def receive(self, index: int) -> type[Author | Client]:
         """
         TODO: Select tne one person from the 'Model' db's table.
         :param index: int. The person's ID from db
@@ -77,18 +77,21 @@ Mistake => {e.__str__()}"
         """
         log.info(f"[{Library_Person.get_one.__name__}] START")
         text = f"[{Library_Person.get_one.__name__}] END"
+        
         try:
             Model = self.get_model_name()
-            model = self.session(Model).query.filter_by(id=index).first()
+            # model = self.session(Model).query.filter_by(id=index).first()
+            model = self.get_one(index, Model)
             if not model:
-                text = text.join(" Mistake => Not found the model's ID.")
-                log.info(text)
+                text = text.join(
+                    " Mistake => Not working index. Index is invalid")
                 raise ValueError(text)
             return model
-                
+
         except Exception as e:
             text = f"[{Library_Person.get_one.__name__}] \
 Mistake => {e.__str__()}"
+            raise ValueError(text)
         finally:
             self.close()
             log.info(text)
@@ -163,14 +166,12 @@ Mistake => {e.__str__()}"
             Model = self.get_model_name()
             response: bool = self.remove_one(index, Model)
             if not response:
-                text = text.join(
-                    " Mistake => Not working index. \
+                text = text.join(" Mistake => Not working index. \
 Index is invalid")
                 raise ValueError(text)
             status = True
         except Exception as e:
-            text = f"[{Library_Person.update.__name__}] \
-Mistake => {e.__str__()}"
+            text = text.join(f" Mistake => {e.__str__()}")
         finally:
             self.close()
             log.info(text)

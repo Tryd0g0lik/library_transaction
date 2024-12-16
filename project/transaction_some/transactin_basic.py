@@ -7,6 +7,7 @@ from typing import (Dict, Any, Union)
 from project.models import get_session
 from project.models_some.model_autors import Author
 from project.models_some.model_book import Book
+from project.models_some.model_borrow import Borrow
 from project.models_some.model_client import Client
 from project.logs import configure_logging
 
@@ -39,7 +40,7 @@ class Library_basis:
             log.info(f"[{__name__}]: Session was closed. Error => {e}")
 
     def remove_one(self, index: int,
-                   Model: type[Union[Author, Client, Book]]) -> bool:
+                   Model: type[Union[Author, Client, Book, Borrow]]) -> bool:
         """
         TODO: Delete an one db's line from db. To the entrypoint we
             receive only one model. It's from 'Book', 'Client' or 'Author'.
@@ -65,6 +66,33 @@ class Library_basis:
         except Exception as e:
             f"[{Library_basis.remove_one.__name__}] \
     Mistake => {e.__str__()}"
+        finally:
+            self.close()
+            log.info(text)
+            return status
+
+    def get_one(self, index: int,
+                Model: type[Author | Client | Book| Borrow]
+                ) -> type[Author | Client | Book| Borrow | bool]:
+        """
+        TODO: By an index, be to select tne one book from the 'Model' db's table.
+        :param index: int. The model's ID from db
+        :return: object a one model from selected by 'id' or bool data.
+        """
+        log.info(f"[{Library_basis.get_one.__name__}] START")
+        text = f"[{Library_basis.get_one.__name__}]"
+        status = False
+        try:
+            book = self.session(Model).query.filter_by(id=index).first()
+            if not book:
+                text = text.join(f" Mistake => Not found the model's ID. \
+Index is invalid.")
+                raise ValueError(text)
+            status = book
+    
+        except Exception as e:
+            text = text.join(f" Mistake => {e.__str__()}")
+    
         finally:
             self.close()
             log.info(text)
