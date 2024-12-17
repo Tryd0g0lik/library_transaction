@@ -12,6 +12,37 @@ configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
 
+@app.route("/api/v1/authors/<int:index>", methods=["PUT"])
+@csrf.exempt
+def author_one_change(index):
+    """
+
+    :param index:
+    :return: ```json
+    {
+        "massage": "Ok",
+        "result": true # or false
+    }
+    ```
+    """
+    response = {"massage": "Ok", "result": None}
+    text = f"[{author_one_get.__name__}]:"
+    log.info(f"{text} START")
+    try:
+        if not index:
+            text = f"{text} 'index' is invalid."
+            raise ValueError(text)
+        
+        person = Library_Person(Author)
+        response["result"] = person.removing(index)
+        text = "".join(f"{text}  END")
+    except Exception as e:
+        text = "".join(f"{text} Mistake => {e.__str__()}")
+        response["message"] = text
+    finally:
+        log.info(text)
+        return jsonify(response), 200
+
 @app.route("/api/v1/authors/<int:index>", methods=["DELETE"])
 @csrf.exempt
 def author_one_remove(index):
@@ -42,6 +73,8 @@ def author_one_remove(index):
     finally:
         log.info(text)
         return jsonify(response), 400
+
+
 @app.route("/api/v1/authors/<int:index>", methods=["GET"])
 def author_one_get(index):
     """
@@ -76,6 +109,7 @@ def author_one_get(index):
     finally:
         log.info(text)
         return jsonify(response), 200
+
 
 @app.route("/api/v1/authors", methods=["GET"])
 def author_get():
@@ -132,13 +166,12 @@ def author_add() -> Response:
                 secondname_=data["secondname"],
                 birthday_=birthday
                 )
-            text = "".join(f"{text}  END")
-    
+            text = f"{text}  END"
+            return jsonify({"message": text}), 200
     except Exception as e:
-        text = "".join(f"{text}Mistake => {e.__str__()}")
+        text = f"{text}Mistake => {e.__str__()}"
+        raise ValueError(text)
     finally:
         flash(text)
         log.info(text)
-        return jsonify(
-            {"message": text}, status=200, mimetype='application/json'
-            )
+        
