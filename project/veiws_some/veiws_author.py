@@ -11,6 +11,37 @@ from project.logs import configure_logging
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
+
+@app.route("/api/v1/authors/<int:index>", methods=["DELETE"])
+@csrf.exempt
+def author_one_remove(index):
+    """
+    
+    :param index:
+    :return: ```json
+    {
+        "massage": "Ok",
+        "result": true # or false
+    }
+    ```
+    """
+    response = {"massage": "Ok", "result": None}
+    text = f"[{author_one_get.__name__}]:"
+    log.info(f"{text} START")
+    try:
+        if not index:
+            text = f"{text} 'index' is invalid."
+            raise ValueError(text)
+    
+        person = Library_Person(Author)
+        response["result"] = person.removing(index)
+        text = "".join(f"{text}  END")
+    except Exception as e:
+        text = "".join(f"{text} Mistake => {e.__str__()}")
+        response["message"] = text
+    finally:
+        log.info(text)
+        return jsonify(response), 400
 @app.route("/api/v1/authors/<int:index>", methods=["GET"])
 def author_one_get(index):
     """

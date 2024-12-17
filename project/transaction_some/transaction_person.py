@@ -177,7 +177,7 @@ Mistake => {e.__str__()}"
                 text = "".join(f"{text}  Mistake => Not working index. \
 Index is invalid")
                 raise ValueError(text)
-            status = True
+            status = response
         except Exception as e:
             text = "".join(f"{text} Mistake => {e.__str__()}")
             raise ValueError(text)

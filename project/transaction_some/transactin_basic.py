@@ -56,12 +56,13 @@ class Library_basis:
         status = False
         try:
             # get data from db
-            authors = self.session(Model).query.filter_by(id=index).first()
+            authors = self.session.query(Model).filter_by(id=index).first()
             if not authors:
                 text = f"[{Library_basis.remove_one.__name__}] \
     Mistake => Not working index."
                 raise ValueError(text)
-            authors.delete()
+            
+            self.session.delete(authors)
             self.session.commit()
             status = True
         except Exception as e:
