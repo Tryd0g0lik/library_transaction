@@ -7,7 +7,7 @@ from datetime import datetime
 from project.logs import configure_logging
 from project.models_some.model_autors import Author
 from project.models_some.model_borrow import Borrow
-from project.transaction_some.transactin_basic import Library_basis
+from project.transaction_some.transaction_basic import Library_basis
 from project.transaction_some.transaction_person import Library_Person
 
 configure_logging(logging.INFO)

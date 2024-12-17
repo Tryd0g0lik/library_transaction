@@ -92,16 +92,16 @@ class Library_basis:
             if index is not None:
                 book = self.session.query(Model).filter_by(id=index).first()
                 if not book:
-                    text = "".join(f"{text} Mistake => Not found the model's ID. \
-    Index is invalid.")
-                    raise ValueError(text)
-                status = [self.serialize(view) for view in [book]]
+                    text = f"{text} Mistake => Not found the model's ID. \
+    Index is invalid."
+                else:
+                    status = [self.serialize(view) for view in [book]]
             else:
                 books = self.session.query(Model).all()
                 
                 status = [self.serialize(view) for view in books]
         except Exception as e:
-            text = "".join(f"{text} Mistake => {e.__str__()}")
+            text = f"{text} Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
             self.close()
@@ -110,6 +110,7 @@ class Library_basis:
 
     def serialize(self, author):
         return {
+            "index": author.id,
             "firstname": author.firstname,
             "secondname": author.secondname,
             "birthday": author.birthday.isoformat() if author.birthday else None,

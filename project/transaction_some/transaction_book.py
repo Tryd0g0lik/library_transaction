@@ -5,7 +5,7 @@ This is a management for control
 import logging
 from project.models_some.model_autors import Author
 from project.models_some.model_book import Book
-from project.transaction_some.transactin_basic import Library_basis
+from project.transaction_some.transaction_basic import Library_basis
 from project.logs import configure_logging
 from project.transaction_some.transaction_person import Library_Person
 
@@ -35,22 +35,22 @@ class Library_book(Library_basis):
         text=f"[{Library_book.add_one.__name__}] END"
         try:
             person = Library_Person(Author)
-            author = person.get_one(author_id_)
+            author = person.receive(author_id_)
             
             if not author:
                 text = f"[{Library_book.add_one.__name__}] \
 Mistake => Not found the author. 'author_id' is invalid."
-                raise ValueError(text)
-            
-            book = Book(
-                title=title_,
-                descriptions=descriptions_,
-                author_id=author.id,
-                quantity=quantity_
-            )
-            self.session.add(book)
-            self.session.commit()
-            status = True
+            else:
+                
+                book = Book(
+                    title=title_,
+                    descriptions=descriptions_,
+                    author_id=2,
+                    quantity=quantity_
+                )
+                self.session.add(book)
+                self.session.commit()
+                status = True
         except Exception as e:
             text = f"[{Library_book.add_one.__name__}]: \
 Mistake => {e.__str__()}"

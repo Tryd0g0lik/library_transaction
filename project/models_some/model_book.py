@@ -21,7 +21,7 @@ class Book(Base):
                                            ondelete="CASCADE"),
                        nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
-    authors = relationship("Author", backref="author")
+    authors = relationship("Author", back_populates="author")
     
     def __str__(self):
         return f"Person ID: {self.id}, Person firstname: {self.title} \

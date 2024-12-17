@@ -8,7 +8,7 @@ working with 'Author' and 'Client' models
 from typing import (Type, Union)
 import logging
 from datetime import datetime
-from project.transaction_some.transactin_basic import Library_basis
+from project.transaction_some.transaction_basic import Library_basis
 from project.models_some.model_autors import Author
 from project.models_some.model_client import Client
 from project.logs import configure_logging
@@ -88,11 +88,11 @@ Mistake => {e.__str__()}"
                 if not model:
                     text = f"{text} Mistake => Not working index. \
 Index is invalid"
-                    raise ValueError(text)
+                
                 return model
-            # get all
-            models = self.get_one(Model)
-            return models
+            if not index:
+                text = f"{text} Mistake => Not working index. \
+Index is invalid"
         except Exception as e:
             text = f"[{Library_Person.get_one.__name__}] \
 Mistake => {e.__str__()}"
