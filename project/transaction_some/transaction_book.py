@@ -77,7 +77,7 @@ Mistake => {e.__str__()}"
                     text = f"{text} Mistake => Not found the  book's ID. \
 Index is invalid."
                 else:
-                    status = [self.serialize(view) for view in book]
+                    status = [self.serialize(view) for view in [book]]
 
             else:
                 books = self.session.query(Book).all()

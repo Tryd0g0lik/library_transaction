@@ -14,9 +14,9 @@ log = logging.getLogger(__name__)
 
 
 @app.route("/api/v1/books", methods=["GET"])
-def book_get():
+@app.route("/api/v1/books/<int:index>", methods=["GET"])
+def book_get(index:int = None):
     """
-
     :return:
     ```json
         {
@@ -33,6 +33,13 @@ def book_get():
         }
 
     ```
+    or
+    ```json
+    {
+        "massage": "Ok",
+        "result": false
+    }
+    ``` if an index was, not found
     """
     response = {"massage": "Ok", "result": None}
     text = f"[{book_get.__name__}]:"
@@ -40,7 +47,7 @@ def book_get():
     status_code = 400
     try:
         person = Library_book()
-        response["result"] = person.receive()
+        response["result"] = person.receive(index)
         text = f"{text}  END"
         status_code = 200
     except Exception as e:
