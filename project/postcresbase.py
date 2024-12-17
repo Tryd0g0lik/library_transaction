@@ -70,11 +70,11 @@ Mistake {e.__str__()}"
 
 
 
-def create_tables(engines):
-    try:
-        # Base.metadata.drop_all(engines)
-        print(f"[create_table]: Drop All")
-
-        Base.metadata.create_all(engines)
-    except Exception as err:
-        print(f"[create_table]: Error => {err.__str__()}")
+# def create_tables(engines):
+#     try:
+#         # Base.metadata.drop_all(engines)
+#         print(f"[create_table]: Drop All")
+#
+#         Base.metadata.create_all(engines)
+#     except Exception as err:
+#         print(f"[create_table]: Error => {err.__str__()}")

@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 class Library_book(Library_basis):
     
-    def add_one(self,
+    async def add_one(self,
                 title_: str,
                 descriptions_: str,
                 author_id_: int,
@@ -35,7 +35,7 @@ class Library_book(Library_basis):
         text=f"[{Library_book.add_one.__name__}] END"
         try:
             person = Library_Person(Author)
-            author = person.receive(author_id_)
+            author = await person.receive(author_id_)
             
             if not author:
                 text = f"[{Library_book.add_one.__name__}] \
@@ -60,7 +60,7 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
 
-    def receive(self, index: int = None) -> type[Book | bool]:
+    async def receive(self, index: int = None) -> type[Book | bool]:
         """
         TODO: By an index, be to select tne one book from the 'Book' db's table.
         :param index: int. The book's ID from db
@@ -91,7 +91,7 @@ Index is invalid."
             log.info(text)
             return status
     
-    def update(self,index:int, new_title_: str = None,
+    async def update(self,index:int, new_title_: str = None,
                new_descriptions_:str = None,
                new_author_id_:int = None,
                new_quantity_:int = None
@@ -157,7 +157,7 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
 
-    def removing(self, index: int) -> bool:
+    async def removing(self, index: int) -> bool:
         """
         TODO: Delete an one db's line from db.
         :param index: int. THis is the model's ID.
@@ -169,14 +169,14 @@ Mistake => {e.__str__()}"
         status = False
         try:
             # get data from db
-            response: bool = self.remove_one(index, Book)
+            response: bool = await self.remove_one(index, Book)
             if not response:
                 text = text.join(
                     " Mistake => Not working index. \
 Index is invalid"
                 )
-                raise ValueError(text)
-            status = response
+            else:
+                status = response
         except Exception as e:
             text = f"[{Library_book.update.__name__}] \
   Mistake => {e.__str__()}"

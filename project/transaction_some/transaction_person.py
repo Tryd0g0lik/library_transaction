@@ -38,7 +38,7 @@ class Library_Person(Library_basis):
         """
         return self.__model_name
 
-    def add_one(self, firstname_:str,
+    async def add_one(self, firstname_:str,
             secondname_:str,
             birthday_: datetime = None) -> bool:
         """
@@ -71,20 +71,20 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
         
-    def receive(self, index: int = None) -> type[Author | Client]:
+    async def receive(self, index: int = None) -> type[Author | Client]:
         """
         TODO: Select tne one person from the 'Model' db's table.
         :param index: int. The person's ID from db
         :return: dict a one person from selected by 'id'.
         """
-        log.info(f"[{Library_Person.get_one.__name__}] START")
-        text = f"[{Library_Person.get_one.__name__}] END"
+        log.info(f"[{Library_Person.receive.__name__}] START")
+        text = f"[{Library_Person.receive.__name__}] END"
         
         try:
             Model = self.get_model_name()
             if index:
                 # model = self.session(Model).query.filter_by(id=index).first()
-                model = self.get_one(Model, index)
+                model = await self.get_one(Model, index)
                 if not model:
                     text = f"{text} Mistake => Not working index. \
 Index is invalid"
@@ -94,14 +94,14 @@ Index is invalid"
                 text = f"{text} Mistake => Not working index. \
 Index is invalid"
         except Exception as e:
-            text = f"[{Library_Person.get_one.__name__}] \
+            text = f"[{Library_Person.receive.__name__}] \
 Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
             self.close()
             log.info(text)
             
-    def update(self, index:int, new_firstname_:str = None,
+    async def update(self, index:int, new_firstname_:str = None,
             new_secondname_:str = None,
             new_birthday_:str=None) -> bool:
         """
@@ -159,7 +159,7 @@ Mistake => {e.__str__()}"
             self.close()
             log.info(text)
             return status
-    def removing(self, index: int) -> bool:
+    async def removing(self, index: int) -> bool:
         """
         TODO: Delete an one db's line from db.
         :param index: int. THis is the model's ID.
@@ -172,7 +172,7 @@ Mistake => {e.__str__()}"
         try:
             # get data from db
             Model = self.get_model_name()
-            response: bool = self.remove_one(index, Model)
+            response: bool =await self.remove_one(index, Model)
             if not response:
                 text = "".join(f"{text}  Mistake => Not working index. \
 Index is invalid")
@@ -185,33 +185,3 @@ Index is invalid")
             self.close()
             log.info(text)
             return status
-#         """
-#         TODO: Delete an one db's line from db.
-#         :param index: int. THis is the model's ID.
-#         :return: 'True' meaning what the object removed from db. Or \
-#         Not if 'False'
-#         """
-#         log.info(f"[{Library_Person.remove_one.__name__}] START")
-#         status_text = f"[{Library_Person.remove_one.__name__}] \
-# Mistake => Not working index."
-#         status = False
-#         try:
-#             # get data from db
-#             Model = self.get_model_name()
-#             authors = self.session(Model).query.filter_by(id=index).first()
-#             if authors:
-#                 log.info(status_text)
-#                 raise ValueError(status_text)
-#             authors.delete()
-#             self.session.commit()
-#             status = True
-#             status_text = status_text.replace(
-#                 "Mistake => Not working index",
-#                 "Mistake => all went very well. Meaning is the True"
-#             )
-#         except Exception as e:
-#             status_text = f"[{Library_Person.remove_one.__name__}] \
-# Mistake => {e.__str__()}"
-#         finally:
-#             log.info(status_text)
-#             return status

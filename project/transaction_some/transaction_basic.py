@@ -40,7 +40,7 @@ class Library_basis:
             log.info(f"[{__name__}]: Session was closed. Error => {e}")
 
             raise ValueError(f"[{__name__}]: Session was closed. Error => {e}")
-    def remove_one(self, index: int,
+    async def remove_one(self, index: int,
                    Model: type[Union[Author, Client, Book, Borrow]]) -> bool:
         """
         TODO: Delete an one db's line from db. To the entrypoint we
@@ -73,7 +73,7 @@ class Library_basis:
             log.info(text)
             return status
 
-    def get_one(self,
+    async def get_one(self,
                 Model: type[Author | Client | Book| Borrow],
                 index: int = None
                 ) -> type[Author | Client | Book| Borrow | bool]:

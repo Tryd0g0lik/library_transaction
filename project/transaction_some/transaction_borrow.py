@@ -14,7 +14,7 @@ configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
 class Library_Borrow(Library_basis):
-    def add_one(self, book_id_: int, client_id_: int,
+    async def add_one(self, book_id_: int, client_id_: int,
                 date_borrow_: datetime = datetime.utcnow,) -> bool:
         """
         TODO: New borrow's line adds to the Model db's table
@@ -29,7 +29,7 @@ class Library_Borrow(Library_basis):
         status = False
         try:
             person = Library_Person(Author)
-            author = person.get_one(client_id_)
+            author = await person.receive(client_id_)
     
             if not author:
                 text = f"[{Library_Borrow.add_one.__name__}] \
@@ -53,7 +53,7 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
     
-    def receive(self, index: int):
+    async def receive(self, index: int):
         """
         TODO: Receive an one db's line from db.
         :param index: int. THis is the model's ID.
@@ -65,7 +65,7 @@ Mistake => {e.__str__()}"
         status = False
         # get_one
         try:
-            response = self.get_one(index, Borrow)
+            response = await self.receive(index)
             if not response:
                 text = text.join(
                     " Mistake => Not working index. \
@@ -79,7 +79,7 @@ Index is invalid")
             log.info(text)
             return status
     
-    def update(self, index: int, book_id_: int = None, client_id_: int = None,
+    async def update(self, index: int, book_id_: int = None, client_id_: int = None,
                date_borrow_: datetime = None, date_return_= datetime.utcnow):
         """
          TODO: New data, we receive for entrypoint, for update the borrow's data \
@@ -100,7 +100,7 @@ Index is invalid")
         text = f"[{Library_Borrow.update.__name__}]"
         status = False
         try:
-            borrow = self.session(Borrow).query.filter_by(id=index).first()
+            borrow = self.session.query(Borrow).filter_by(id=index).first()
             if not borrow:
                 text = f"[{text} \
 Mistake => Not working index. Index is invalid"
