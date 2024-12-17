@@ -12,6 +12,62 @@ from project.logs import configure_logging
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
+
+@app.route("/api/v1/books/<int:index>", methods=["PUT"])
+@csrf.exempt
+def book_one_change(index):
+    """
+    Here, can change the one or everything Book's attribute from: \n
+    - "author_id";
+    - "descriptions";
+    - "index";
+    - "quantity";
+    - "title".
+
+    Request is
+     ```json
+        {
+            "firstname": "Igor77", \n
+            "secondname": null, // or 'Igorev' \n
+            "birthday": null // or '1980.06.25'
+        }
+    ```
+    Over is a code for an entrypoint.
+    :param index: int. Index.
+    :return: ```json
+    {
+        "message": "Ok", \n
+        "result": true # or false \n
+    }
+    ``` and the status code = 200
+    """
+    data = json.loads(request.data)
+    response = {"message": "Ok", "result": None}
+    text = f"[{book_one_change.__name__}]:"
+    log.info(f"{text} START")
+    try:
+        if not index:
+            text = f"{text} 'index' is invalid."
+        else:
+            person = Library_book()
+            result: bool = person.update(
+                index,
+                new_title_=data["title"] if data["title"] else "",
+                new_descriptions_=data["descriptions"] if data["descriptions"]
+                else "",
+                new_author_id_=data["author_id"] if data["author_id"] else "",
+                new_quantity_=data["quantity"] if data["quantity"] else "",
+            )
+            if not result:
+                response["message"] = "Not OK"
+            text = f"{text}  END"
+    except Exception as e:
+        text = f"{text} Mistake => {e.__str__()}"
+        response["message"] = text
+    finally:
+        log.info(text)
+        return jsonify(response), 200
+    
 @app.route("/api/v1/books/<int:index>", methods=["DELETE"])
 @csrf.exempt
 def book_one_remove(index:int = None):
@@ -132,10 +188,11 @@ or 'author_id', or 'quantity'"
             flash(text)
         else:
             result = persone.add_one(
-                title_=data["title"],
-                descriptions_=data["descriptions"],
-                author_id_=int(data["author_id"]),
-                quantity_=int(data["quantity"])
+                title_=data["title"] if data["title"] else "",
+                descriptions_=data["descriptions"] if data["descriptions"]
+                else "",
+                author_id_=data["author_id"] if data["author_id"] else "",
+                quantity_=data["quantity"] if data["quantity"] else "",
             )
             text = f"{text}  END"
             if not result:

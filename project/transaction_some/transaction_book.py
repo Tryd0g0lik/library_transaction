@@ -91,10 +91,10 @@ Index is invalid."
             log.info(text)
             return status
     
-    def update(self,index:int, new_title_: type[str | None ] = None,
-               new_descriptions_: type[str | None] = None,
-               new_author_id_: type[int | None] = None,
-               new_quantity_: type[int | None] = None
+    def update(self,index:int, new_title_: str = None,
+               new_descriptions_:str = None,
+               new_author_id_:int = None,
+               new_quantity_:int = None
                ) -> bool:
         """
         TODO: New data, we receive from entrypoint, for update the Book's data, \

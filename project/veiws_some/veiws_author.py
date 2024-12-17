@@ -48,10 +48,11 @@ def author_one_change(index):
             raise ValueError(text)
         
         person = Library_Person(Author)
-        response["result"] = person.update(index,
-                                           new_firstname_=data["firstname"],
-                                           new_secondname_=data["secondname"],
-                                           new_birthday_=data["birthday"])
+        response["result"] = person.update(
+            index,
+            new_firstname_=data["firstname"] if data["firstname"] else "",
+            new_secondname_=data["secondname"] if data["secondname"] else "",
+            new_birthday_=data["birthday"] if data["birthday"] else None)
         text = "".join(f"{text}  END")
     except Exception as e:
         text = "".join(f"{text} Mistake => {e.__str__()}")
@@ -184,9 +185,10 @@ def author_add() -> Response:
             birthday = \
                 data["birthday"] if data["birthday"] else datetime.utcnow()
             persone.add_one(
-                firstname_=data["firstname"],
-                secondname_=data["secondname"],
-                birthday_=birthday
+                firstname_=data["firstname"] if data["firstname"] else "",
+                secondname_=data["secondname"] if data[
+                    "secondname"] else "",
+                birthday_=data["birthday"] if data["birthday"] else None
                 )
             text = f"{text}  END"
             return jsonify({"message": text}), 200
