@@ -17,11 +17,11 @@ class Book(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(155), nullable=False, unique=True)
     descriptions = Column(Text)
-    author_id = Column(Integer, ForeignKey("author.id",
+    author_id = Column(Integer, ForeignKey("authors.id",
                                            ondelete="CASCADE"),
                        nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
-    authors = relationship("Author", back_populates="author")
+    authors = relationship("Author", backref="authors")
     
     def __str__(self):
         return f"Person ID: {self.id}, Person firstname: {self.title} \
