@@ -45,7 +45,7 @@ Mistake => Not found the author. 'author_id' is invalid."
                 book = Book(
                     title=title_,
                     descriptions=descriptions_,
-                    author_id=2,
+                    author_id=author_id_,
                     quantity=quantity_
                 )
                 self.session.add(book)
