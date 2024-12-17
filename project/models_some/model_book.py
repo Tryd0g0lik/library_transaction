@@ -17,8 +17,7 @@ class Book(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(155), nullable=False, unique=True)
     descriptions = Column(Text)
-    author_id = Column(Integer, ForeignKey("author.id",
-                                           ondelete="CASCADE"),
+    author_id = Column(Integer, ForeignKey("author.id"),
                        nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
     authors = relationship("Author", backref="authors")

@@ -33,13 +33,13 @@ def author_one_change(index):
     :param index: int. Index.
     :return: ```json
     {
-        "massage": "Ok", \n
+        "message": "Ok", \n
         "result": true # or false \n
     }
     ``` and the status code = 200
     """
     data = json.loads(request.data)
-    response = {"massage": "Ok", "result": None}
+    response = {"message": "Ok", "result": None}
     text = f"[{author_one_get.__name__}]:"
     log.info(f"{text} START")
     try:
@@ -68,12 +68,12 @@ def author_one_remove(index):
     :param index:
     :return: ```json
     {
-        "massage": "Ok",
+        "message": "Ok",
         "result": true # or false
     }
     ```
     """
-    response = {"massage": "Ok", "result": None}
+    response = {"message": "Ok", "result": None}
     text = f"[{author_one_get.__name__}]:"
     log.info(f"{text} START")
     try:
@@ -82,6 +82,10 @@ def author_one_remove(index):
             raise ValueError(text)
     
         person = Library_Person(Author)
+        result = person.removing(index)
+        if not result:
+            response["message"] = "Not OK"
+        
         response["result"] = person.removing(index)
         text = "".join(f"{text}  END")
     except Exception as e:
@@ -98,7 +102,7 @@ def author_one_get(index):
     Receive tha one author by index.
     :return ```json
     {
-        "massage": "",
+        "message": "",
         "result": [
             {
                 "birthday": "2024-12-17T00:03:55.776287",
@@ -109,7 +113,7 @@ def author_one_get(index):
     }
     ```
     """
-    response = {"massage": "Ok", "result": None}
+    response = {"message": "Ok", "result": None}
     text = f"[{author_one_get.__name__}]:"
     log.info(f"{text} START")
     try:
@@ -131,11 +135,12 @@ def author_one_get(index):
 @app.route("/api/v1/authors", methods=["GET"])
 def author_get():
     """
-
+     We create a request by API's reference '/api/v1/authors' and method "GET".
+        It returns everything authors from db.
     :return:
     ```json
         {
-        "massage": "",
+        "message": "",
         "result": [
             {
                 "birthday": "2024-12-17T00:03:55.776287",
@@ -146,7 +151,7 @@ def author_get():
 
     ```
     """
-    response = {"massage": "Ok", "result": None}
+    response = {"message": "Ok", "result": None}
     text = f"[{author_get.__name__}]:"
     log.info(f"{text} START")
     try:

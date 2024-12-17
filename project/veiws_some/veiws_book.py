@@ -12,7 +12,43 @@ from project.logs import configure_logging
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
-
+@app.route("/api/v1/books/<int:index>", methods=["DELETE"])
+@csrf.exempt
+def book_one_remove(index:int = None):
+    """
+    We create a request by API's reference '/api/v1/books/{index}'
+    and method "DELETE".
+    This mean what we want getting one a book by ID.
+    :return if everything is the OK, it means we will get the ```json
+    {
+        "message": "Ok",
+        "result": true
+    } or not the OK ```json
+    {
+        "message": "Not OK",
+        "result": false
+    }
+    ```
+    """
+    response = {"message": "Ok", "result": None}
+    text = f"[{book_get.__name__}]:"
+    log.info(f"{text} START")
+    status_code = 400
+    try:
+        person = Library_book()
+        result: bool = person.removing(index)
+        if not result:
+            response["message"] = "Not OK"
+        response["result"] = result
+        text = f"{text}  END"
+        
+    except Exception as e:
+        text = f"{text} Mistake => {e.__str__()}"
+        response["message"] = text
+    finally:
+        log.info(text)
+        return jsonify(response), status_code
+    
 @app.route("/api/v1/books", methods=["GET"])
 @app.route("/api/v1/books/<int:index>", methods=["GET"])
 def book_get(index:int = None):
@@ -25,7 +61,7 @@ def book_get(index:int = None):
     :return:
     ```json
         {
-            "massage": "Ok",
+            "message": "Ok",
             "result": [
                 {
                     "author_id": 2,
@@ -41,12 +77,12 @@ def book_get(index:int = None):
     or
     ```json
     {
-        "massage": "Ok",
+        "message": "Ok",
         "result": false
     }
     ``` if an index was, not found
     """
-    response = {"massage": "Ok", "result": None}
+    response = {"message": "Ok", "result": None}
     text = f"[{book_get.__name__}]:"
     log.info(f"{text} START")
     status_code = 400
