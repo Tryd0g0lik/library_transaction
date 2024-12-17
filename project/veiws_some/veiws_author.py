@@ -15,6 +15,18 @@ log = logging.getLogger(__name__)
 def author_one_get(index):
     """
     Receive tha one author by index.
+    :return ```json
+    {
+        "massage": "",
+        "result": [
+            {
+                "birthday": "2024-12-17T00:03:55.776287",
+                "firstname": "Igor",
+                "secondname": "Igorev"
+            }
+        ]
+    }
+    ```
     """
     response = {"massage": "Ok", "result": None}
     text = f"[{author_one_get.__name__}]:"
