@@ -60,25 +60,30 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
 
-    def get_one(self, index: int) -> type[Book | bool]:
+    def receive(self, index: int = None) -> type[Book | bool]:
         """
         TODO: By an index, be to select tne one book from the 'Book' db's table.
         :param index: int. The book's ID from db
         :return: object a one book from selected by 'id' or bool data.
         """
-        log.info(f"[{Library_book.get_one.__name__}] START")
+        text = f"[{Library_book.receive.__name__}]:"
+        log.info(f"{text} START")
         text = "END"
         status = False
         try:
-            book = self.session(Book).query.filter_by(id=index).first()
-            if not book:
-                text = f"[{Library_book.get_one.__name__}] \
- Mistake => Not found the book's ID. Index is invalid."
-                raise ValueError(text)
-            status = book
-    
+            if index is not None:
+                book = self.session.query(Book).filter_by(id=index).first()
+                if not book:
+                    text = f"{text} Mistake => Not found the  book's ID. \
+Index is invalid."
+                else:
+                    status = [self.serialize(view) for view in book]
+
+            else:
+                books = self.session.query(Book).all()
+                status = [self.serialize(view) for view in books]
         except Exception as e:
-            text = f"[{Library_book.get_one.__name__}] \
+            text = f"[{Library_book.receive.__name__}] \
  Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
@@ -181,6 +186,15 @@ Index is invalid"
             log.info(text)
             return status
             
+    def serialize(self, book):
+        return {
+            "index": book.id,
+            "title": book.title,
+            "descriptions": book.descriptions,
+            "author_id": book.author_id,
+            "quantity": book.quantity
+            
+        }
 #     def remove_one(self, index: int) -> bool:
 # #         """
 # #         TODO: Delete an one db's line from db.
