@@ -17,23 +17,33 @@ log = logging.getLogger(__name__)
 @csrf.exempt
 def book_one_change(index):
     """
-    Here, can change the one or everything Book's attribute from: \n
+    Here, can change the one or everything Book's attributes from: \n
     - "author_id";
     - "descriptions";
     - "index";
     - "quantity";
-    - "title".
+    - "title". Or the single attribute for changes. Index's attribute,
+    it is number a book which we want to change.
 
     Request is
      ```json
         {
-            "firstname": "Igor77", \n
-            "secondname": null, // or 'Igorev' \n
-            "birthday": null // or '1980.06.25'
+            "title":"title Big book",
+            "descriptions":"descriptions descriptions ",
+            "author_id":1,
+            "quantity":24
         }
+    ``` or the single from over code. Example is the code below:
+    ```jsom
+    {
+        "title":null,
+        "descriptions":null,
+        "author_id":2,
+        "quantity":null
+    }
     ```
     Over is a code for an entrypoint.
-    :param index: int. Index.
+    :param index: int. Index from db..
     :return: ```json
     {
         "message": "Ok", \n

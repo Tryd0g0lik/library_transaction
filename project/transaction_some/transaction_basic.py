@@ -60,11 +60,10 @@ class Library_basis:
             if not authors:
                 text = f"[{Library_basis.remove_one.__name__}] \
     Mistake => Not working index."
-                raise ValueError(text)
-            
-            self.session.delete(authors)
-            self.session.commit()
-            status = True
+            else:
+                self.session.delete(authors)
+                self.session.commit()
+                status = True
         except Exception as e:
             text = f"[{Library_basis.remove_one.__name__}] \
     Mistake => {e.__str__()}"

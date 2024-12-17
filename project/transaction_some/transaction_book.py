@@ -114,8 +114,8 @@ Index is invalid."
         status = False
         try:
             # get data from db
-            book = self.session(Book).query.filter_by(id=index).first()
-            if book:
+            book = self.session.query(Book).filter_by(id=index).first()
+            if not book:
                 text = f"[{text} \
 Mistake => Not working index. Index is invalid"
                 raise ValueError(text)
@@ -128,25 +128,25 @@ Mistake => Not working index. Index is invalid"
                 text = f"[{Library_book.update.__name__}] \
 Mistake => Object not found, was"
                 raise ValueError(text)
-            status_text = f"[{Library_book.update.__name__}]"
+            status_text = ""
             if new_title_:
                 book.title = new_title_
-                status_text = "".join(f"{text}  Meaning this 'title' \
-was updated.")
+                status_text = f"{status_text} Meaning this 'title' \
+was updated."
             if new_descriptions_:
                 book.descriptions = new_descriptions_
-                status_text = "".join(f"{text}  Meaning this 'description' \
+                status_text = "".join(f"{status_text}  Meaning this 'description' \
 was updated")
             if new_author_id_:
                 book.author_id = new_author_id_
-                status_text = "".join(f"{text}  Meaning this 'authors \
+                status_text = "".join(f"{status_text}  Meaning this 'authors \
 was updated")
             if new_quantity_:
                 book.quantity = new_quantity_
-                status_text = "".join(f"{text}  Meaning this 'quantity' \
+                status_text = "".join(f"{status_text}  Meaning this 'quantity' \
 was updated")
             self.session.commit()
-            text = "".join(f"{text} Db 'Book' was updated. END")
+            text = "".join(f"{text} {status_text}. Db 'Book' was updated. END")
             status = True
         except Exception as e:
             text = f"[{Library_book.update.__name__}] \
