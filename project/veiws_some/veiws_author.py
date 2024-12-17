@@ -11,6 +11,28 @@ from project.logs import configure_logging
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
+@app.route("/api/v1/authors/<int:index>", methods=["GET"])
+def author_one_get(index):
+    """
+    Receive tha one author by index.
+    """
+    response = {"massage": "Ok", "result": None}
+    text = f"[{author_one_get.__name__}]:"
+    log.info(f"{text} START")
+    try:
+        if not index:
+            text = f"{text} 'index' is invalid."
+            raise ValueError(text)
+        
+        person = Library_Person(Author)
+        response["result"] = person.receive(index)
+        text = "".join(f"{text}  END")
+    except Exception as e:
+        text = "".join(f"{text} Mistake => {e.__str__()}")
+        response["message"] = text
+    finally:
+        log.info(text)
+        return jsonify(response), 200
 
 @app.route("/api/v1/authors", methods=["GET"])
 def author_get():
@@ -30,7 +52,7 @@ def author_get():
 
     ```
     """
-    response = {"massage": "", "result": None}
+    response = {"massage": "Ok", "result": None}
     text = f"[{author_get.__name__}]:"
     log.info(f"{text} START")
     try:

@@ -86,8 +86,8 @@ Mistake => {e.__str__()}"
                 # model = self.session(Model).query.filter_by(id=index).first()
                 model = self.get_one(Model, index)
                 if not model:
-                    text = text.join(
-                        " Mistake => Not working index. Index is invalid")
+                    text = f"{text} Mistake => Not working index. \
+Index is invalid"
                     raise ValueError(text)
                 return model
             # get all

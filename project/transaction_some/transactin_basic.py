@@ -89,12 +89,12 @@ class Library_basis:
         
         try:
             if index is not None:
-                book = self.session(Model).query.filter_by(id=index).first()
+                book = self.session.query(Model).filter_by(id=index).first()
                 if not book:
                     text = "".join(f"{text} Mistake => Not found the model's ID. \
     Index is invalid.")
                     raise ValueError(text)
-                status = book
+                status = [self.serialize(view) for view in [book]]
             else:
                 books = self.session.query(Model).all()
                 
