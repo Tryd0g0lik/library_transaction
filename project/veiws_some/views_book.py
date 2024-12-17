@@ -1,11 +1,9 @@
+"""Here are the API keys for work with books"""
 import json
 import logging
-from datetime import datetime
 from flask import (request, jsonify, flash, Response)
 from project.apps import app_ as app
-from project.models_some.model_autors import Author
 from project.transaction_some.transaction_book import Library_book
-from project.transaction_some.transaction_person import Library_Person
 from project.apps import csrf
 from project.logs import configure_logging
 

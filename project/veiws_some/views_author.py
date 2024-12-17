@@ -1,3 +1,4 @@
+"""Here are the API keys for work with authors"""
 import json
 import logging
 from datetime import datetime
