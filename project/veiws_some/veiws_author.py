@@ -16,15 +16,29 @@ log = logging.getLogger(__name__)
 @csrf.exempt
 def author_one_change(index):
     """
+    Here, can change the one or everything Author's attribute from: \n
+    - 'firstname';
+    - 'secondname';
+    - 'birthday'.
 
-    :param index:
+    Request is
+     ```json
+        {
+            "firstname": "Igor77", \n
+            "secondname": null, // or 'Igorev' \n
+            "birthday": null // or '1980.06.25'
+        }
+    ```
+    Over is a code for an entrypoint.
+    :param index: int. Index.
     :return: ```json
     {
-        "massage": "Ok",
-        "result": true # or false
+        "massage": "Ok", \n
+        "result": true # or false \n
     }
-    ```
+    ``` and the status code = 200
     """
+    data = json.loads(request.data)
     response = {"massage": "Ok", "result": None}
     text = f"[{author_one_get.__name__}]:"
     log.info(f"{text} START")
@@ -34,7 +48,10 @@ def author_one_change(index):
             raise ValueError(text)
         
         person = Library_Person(Author)
-        response["result"] = person.removing(index)
+        response["result"] = person.update(index,
+                                           new_firstname_=data["firstname"],
+                                           new_secondname_=data["secondname"],
+                                           new_birthday_=data["birthday"])
         text = "".join(f"{text}  END")
     except Exception as e:
         text = "".join(f"{text} Mistake => {e.__str__()}")

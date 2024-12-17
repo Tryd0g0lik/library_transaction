@@ -101,9 +101,9 @@ Mistake => {e.__str__()}"
             self.close()
             log.info(text)
             
-    def update(self, index:int, new_firstname_:[str, None] = None,
-            new_secondname_:[str, None] = None,
-            new_birthday_:[str, None]=None) -> bool:
+    def update(self, index:int, new_firstname_:str = None,
+            new_secondname_:str = None,
+            new_birthday_:str=None) -> bool:
         """
         TODO: New data, we receive for entrypoint, for update the model's data \
             from tabel db. From entrypoint we can receive one \
@@ -123,7 +123,7 @@ Mistake => {e.__str__()}"
         try:
             # get data from db
             Model = self.get_model_name()
-            authors = self.session(Model).query.filter_by(id=index).first()
+            authors = self.session.query(Model).filter_by(id=index).first()
             if not authors:
                 text = "".join(f"{text}  Mistake => Not working index. \
 Index is invalid")
