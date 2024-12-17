@@ -17,6 +17,11 @@ log = logging.getLogger(__name__)
 @app.route("/api/v1/books/<int:index>", methods=["GET"])
 def book_get(index:int = None):
     """
+    We create a request by API's reference '/api/v1/books' and method "GET".
+    It returns the all books from db.
+    If, API's reference '/api/v1/books/{index}' this mean what we want getting
+    one a book by ID.
+    Request's body contain:
     :return:
     ```json
         {
