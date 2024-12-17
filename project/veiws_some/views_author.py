@@ -33,8 +33,8 @@ def author_one_change(index):
     :param index: int. Index.
     :return: ```json
     {
-        "message": "Ok", \n
-        "result": true # or false \n
+        "message": "Ok",
+        "result": true # or false
     }
     ``` and the status code = 200
     """

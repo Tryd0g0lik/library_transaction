@@ -195,33 +195,3 @@ Index is invalid"
             "quantity": book.quantity
             
         }
-#     def remove_one(self, index: int) -> bool:
-# #         """
-# #         TODO: Delete an one db's line from db.
-# #         :param index: int. THis is the book's ID.
-# #         :return: 'True' meaning what the object removed from db. Or
-# #         Not if 'False'
-# #         """
-# #         log.info(f"[{Library_book.remove_one.__name__}] START")
-# #
-# #         text = f"[{Library_book.remove_one.__name__}] END"
-# #         status = False
-# #         try:
-# #             # get data from db
-# #             authors = self.session(Book).query.filter_by(id=index).first()
-# #             if authors:
-# #                 text = f"[{Library_book.remove_one.__name__}] \
-# # Mistake => Not working index."
-# #                 raise ValueError(text)
-# #             authors.delete()
-# #             self.session.commit()
-# #             status = True
-# #         except Exception as e:
-# #             f"[{Library_book.remove_one.__name__}] \
-# # Mistake => {e.__str__()}"
-# #         finally:
-# #             self.close()
-# #             log.info(text)
-# #             return status
-        
-        
