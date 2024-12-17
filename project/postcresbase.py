@@ -6,7 +6,7 @@ import psycopg2
 from psycopg2 import sql
 
 from dotenv_ import (APP_POSTGRES_HOST, APP_POSTGRES_LOGIN, APP_POSTGRES_PASS,
-                     APP_POSTGRES_PORT)
+                     APP_POSTGRES_PORT, DSN)
 
 
 def create_database_if_not_exsists(db_name: str) -> bool:
@@ -66,3 +66,15 @@ Mistake {e.__str__()}"
         log.info(status_text)
         return status
 
+
+
+
+
+def create_tables(engines):
+    try:
+        # Base.metadata.drop_all(engines)
+        print(f"[create_table]: Drop All")
+
+        Base.metadata.create_all(engines)
+    except Exception as err:
+        print(f"[create_table]: Error => {err.__str__()}")

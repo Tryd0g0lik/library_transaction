@@ -8,7 +8,7 @@ class Book(Base):
     """
     TODO:Thi is a db table the books
         :param title: str. This is a name book.
-        :param descriptions: str. This a line is contain a description of book.
+        :param descriptions: str. This a line contain is a description of book.
         :param author_id: int.
         :param quantity: int. This a remainder of books.
     """
@@ -16,12 +16,12 @@ class Book(Base):
     __tablename__ = "books"
     id = Column(Integer, primary_key=True)
     title = Column(String(155), nullable=False, unique=True)
-    descriptions = Column(Text(255))
-    author_id = Column(Integer, ForeignKey("authors.id",
+    descriptions = Column(Text)
+    author_id = Column(Integer, ForeignKey("author.id",
                                            ondelete="CASCADE"),
                        nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
-    authors = relationship("Authors", backref="authors")
+    authors = relationship("Author", backref="author")
     
     def __str__(self):
         return f"Person ID: {self.id}, Person firstname: {self.title} \

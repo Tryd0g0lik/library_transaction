@@ -126,22 +126,22 @@ Mistake => Object not found, was"
             status_text = f"[{Library_book.update.__name__}]"
             if new_title_:
                 book.title = new_title_
-                status_text = status_text.join(" Meaning this 'title' \
+                status_text = "".join(f"{text}  Meaning this 'title' \
 was updated.")
             if new_descriptions_:
                 book.descriptions = new_descriptions_
-                status_text = status_text.join(" Meaning this 'description' \
+                status_text = "".join(f"{text}  Meaning this 'description' \
 was updated")
             if new_author_id_:
                 book.author_id = new_author_id_
-                status_text = status_text.join(" Meaning this 'authors \
+                status_text = "".join(f"{text}  Meaning this 'authors \
 was updated")
             if new_quantity_:
                 book.quantity = new_quantity_
-                status_text = status_text.join(" Meaning this 'quantity' \
+                status_text = "".join(f"{text}  Meaning this 'quantity' \
 was updated")
             self.session.commit()
-            text = status_text.join("Db 'Book' was updated. END")
+            text = "".join(f"{text} Db 'Book' was updated. END")
             status = True
         except Exception as e:
             text = f"[{Library_book.update.__name__}] \

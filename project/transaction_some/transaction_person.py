@@ -21,7 +21,7 @@ class Library_Person(Library_basis):
     Here, is a DYNAMICALLY class for work with tabular models from db.
     This tabular models it means the 'Author' and 'Client' models.
     """
-    def __init__(self,  model_name: [Author, Client]):
+    def __init__(self,  model_name: type[Author | Client]):
         """
         TODO: To the entrypoint we receive only one model. It's  
             from 'Client' or 'Author'.
@@ -30,7 +30,7 @@ class Library_Person(Library_basis):
         super().__init__()
         self.__model_name = model_name
 
-    def get_model_name(self) -> [Author, Client]:
+    def get_model_name(self) ->type[Author | Client]:
         """
         TODO: Receives a value from a private variable. This a variable 
             means the 'Author' and 'Client' models
@@ -52,11 +52,11 @@ class Library_Person(Library_basis):
         text = f"[{Library_Person.add_one.__name__}] END"
         status = False
         try:
+            birthday = birthday_ if birthday_ else datetime.utcnow()
             Model = self.get_model_name()
             model = Model(firstname=firstname_,
                             secondname=secondname_,
-                            birthday=birthday_ if birthday_ else
-datetime.utcnow()
+                            birthday=birthday
                             )
             self.session.add(model)
             self.session.commit()
@@ -84,7 +84,7 @@ Mistake => {e.__str__()}"
             Model = self.get_model_name()
             if index:
                 # model = self.session(Model).query.filter_by(id=index).first()
-                model = self.get_one(index, Model)
+                model = self.get_one(Model, index)
                 if not model:
                     text = text.join(
                         " Mistake => Not working index. Index is invalid")
@@ -125,7 +125,7 @@ Mistake => {e.__str__()}"
             Model = self.get_model_name()
             authors = self.session(Model).query.filter_by(id=index).first()
             if not authors:
-                text = text.join(" Mistake => Not working index. \
+                text = "".join(f"{text}  Mistake => Not working index. \
 Index is invalid")
                 raise ValueError(text)
             attrib_list = [new_firstname_, new_secondname_, new_birthday_]
@@ -133,23 +133,23 @@ Index is invalid")
             # data in db
             working_attrib = [view for view in attrib_list if view]
             if len(working_attrib) == 0:
-                text = text.join(" Mistake => Object not found, was.")
+                text = "".join(f"{text}  Mistake => Object not found, was.")
                 log.info(text)
                 raise ValueError(text)
             
             if new_firstname_:
                 authors.firstname = new_firstname_
-                text = text.join(" Meaning this 'firstname' was updated.")
+                text = "".join(f"{text}  Meaning this 'firstname' was updated.")
             if new_secondname_:
                 authors.secondname = new_secondname_
-                text = text.join(" Meaning this 'secondname' \
+                text = "".join(f"{text}  Meaning this 'secondname' \
 was updated.")
             if new_birthday_:
                 authors.birthday = new_birthday_
-                text = text.join(" Meaning this 'birthday' \
+                text = "".join(f"{text}  Meaning this 'birthday' \
 was updated.")
             self.session.commit()
-            text = text.join("Db was updated. END")
+            text = "".join(f"{text} Db was updated. END")
             status = True
         except Exception as e:
             text = f"[{Library_Person.update.__name__}] \
@@ -174,12 +174,12 @@ Mistake => {e.__str__()}"
             Model = self.get_model_name()
             response: bool = self.remove_one(index, Model)
             if not response:
-                text = text.join(" Mistake => Not working index. \
+                text = "".join(f"{text}  Mistake => Not working index. \
 Index is invalid")
                 raise ValueError(text)
             status = True
         except Exception as e:
-            text = text.join(f" Mistake => {e.__str__()}")
+            text = "".join(f"{text} Mistake => {e.__str__()}")
             raise ValueError(text)
         finally:
             self.close()

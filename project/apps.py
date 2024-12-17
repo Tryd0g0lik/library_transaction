@@ -40,6 +40,7 @@ def create_flask() -> Dict[str, Any]:
     app.config["BOOTSTRAP"] = bootstrap
     csrf = CSRFProtect(app)
     
+    
     # CREATE REDIS
     # redis_client = FlaskRedis()
     # REDIS INSTALL to the app
@@ -54,6 +55,7 @@ def create_flask() -> Dict[str, Any]:
 flask_dict = create_flask()
 app_ = flask_dict["app"]
 csrf = flask_dict["csrf"]
+
 bcrypt = flask_dict["bcrypt"]
 app_type = type(app_)
 

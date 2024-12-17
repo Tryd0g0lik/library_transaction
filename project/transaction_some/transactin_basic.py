@@ -73,8 +73,9 @@ class Library_basis:
             log.info(text)
             return status
 
-    def get_one(self, index: [int, None],
-                Model: type[Author | Client | Book| Borrow]
+    def get_one(self,
+                Model: type[Author | Client | Book| Borrow],
+                index: int = None
                 ) -> type[Author | Client | Book| Borrow | bool]:
         """
         TODO: By an index, be to select tne one book from the 'Model' db's table.
@@ -85,22 +86,32 @@ class Library_basis:
         log.info(f"[{Library_basis.get_one.__name__}] START")
         text = f"[{Library_basis.get_one.__name__}]"
         status = False
+        
         try:
-            if index:
+            if index is not None:
                 book = self.session(Model).query.filter_by(id=index).first()
                 if not book:
-                    text = text.join(f" Mistake => Not found the model's ID. \
+                    text = "".join(f"{text} Mistake => Not found the model's ID. \
     Index is invalid.")
                     raise ValueError(text)
                 status = book
             else:
-                books = self.session(Model).query.all()
-                status = books
+                books = self.session.query(Model).all()
+                
+                status = [self.serialize(view) for view in books]
         except Exception as e:
-            text = text.join(f" Mistake => {e.__str__()}")
+            text = "".join(f"{text} Mistake => {e.__str__()}")
             raise ValueError(text)
         finally:
             self.close()
             log.info(text)
             return status
+
+    def serialize(self, author):
+        return {
+            "firstname": author.firstname,
+            "secondname": author.secondname,
+            "birthday": author.birthday.isoformat() if author.birthday else None,
+            # Add other fields as necessary
+        }
         

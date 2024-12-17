@@ -14,13 +14,13 @@ class Borrow(Base):
     book_id = Column(Integer, ForeignKey("books.id",
                                          ondelete="CASCADE"),
                      nullable=False)
-    client_id = Column(String, ForeignKey("clients.firstname",
+    client_id = Column(Integer, ForeignKey("client.id",
                                           ondelete="CASCADE"),
                        nullable=False)
     date_borrow = Column(DateTime, default=datetime.utcnow)
     date_return = Column(DateTime)
-    books = relationship("Books", backref="books")
-    clients = relationship("CLients", backref="clients")
+    books = relationship("Book", backref="books")
+    clients = relationship("Client", backref="client")
     
     def __str__(self):
         return f"Person ID: {self.book_id}, Person firstname: {self.date_borrow} \
