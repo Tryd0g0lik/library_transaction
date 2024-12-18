@@ -107,12 +107,19 @@ class Library_basis:
             log.info(text)
             return status
 
-    def serialize(self, author):
-        return {
-            "index": author.id,
-            "firstname": author.firstname,
-            "secondname": author.secondname,
-            "birthday": author.birthday.isoformat() if author.birthday else None,
-            # Add other fields as necessary
-        }
-        
+    def serialize(self, person):
+        try:
+            return {
+                "index": person.id if person.id else None,
+                "firstname": person.firstname if person.firstname else None ,
+                "secondname": person.secondname if person.secondname else None,
+                "birthday": person.birthday.isoformat() if person.birthday else None,
+                # Add other fields as necessary
+            }
+        except Exception as e:
+            return {
+                "index": person.id if person.id else None,
+                "firstname": person.firstname if person.firstname else None,
+                "birthday": person.birthday.isoformat() if person.birthday else None,
+                # Add other fields as necessary
+            }

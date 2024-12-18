@@ -93,17 +93,15 @@ Mistake => {e.__str__()}"
         
         try:
             Model = self.get_model_name()
-            if index:
-                # model = self.session(Model).query.filter_by(id=index).first()
-                model = await self.get_one(Model, index)
-                if not model:
-                    text = f"{text} Mistake => Not working index. \
-Index is invalid"
-                
-                return model
-            if not index:
+        
+            # model = self.session(Model).query.filter_by(id=index).first()
+            model = await self.get_one(Model, index)
+            if not model:
                 text = f"{text} Mistake => Not working index. \
 Index is invalid"
+            
+            return model
+        
         except Exception as e:
             text = f"[{text}] \
 Mistake => {e.__str__()}"
