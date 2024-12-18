@@ -39,30 +39,41 @@ class Library_Person(Library_basis):
         return self.__model_name
 
     async def add_one(self, firstname_:str,
-            secondname_:str,
+            secondname_:str=None,
             birthday_: datetime = None) -> bool:
         """
         TODO: New model's line adds to the Model db's table
         :param firstname_: str. The person's firstname.
-        :param secondname_: str.  The person's secondname.
-        :param birthday_:  The person's datetime.
+        :param secondname_: str.  The person's secondname. Default is the None
+        :param birthday_:  The person's datetime.  Default is the None
         :return: bool. 'True' it means was created new line of db or not.
         """
         log.info(f"[{Library_Person.add_one.__name__}] START")
-        text = f"[{Library_Person.add_one.__name__}] END"
+        text = f"[{Library_Person.add_one.__name__}]:"
         status = False
         try:
             birthday = birthday_ if birthday_ else datetime.utcnow()
             Model = self.get_model_name()
-            model = Model(firstname=firstname_,
-                            secondname=secondname_,
-                            birthday=birthday
-                            )
-            self.session.add(model)
-            self.session.commit()
-            status = True
+            model = None
+            if secondname_:
+                model = Model(firstname=firstname_,
+                                secondname=secondname_,
+                                birthday=birthday
+                                )
+            else:
+                model = Model(
+                    firstname=firstname_,
+                    birthday=birthday
+                    )
+            if not model:
+                text = f"{text} Something what wrong with 'model'!"
+                raise ValueError(text)
+            else:
+                self.session.add(model)
+                self.session.commit()
+                status = True
         except Exception as e:
-            text = f"[{Library_Person.add_one.__name__}]: \
+            text = f"[{text}]: \
 Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
@@ -78,7 +89,7 @@ Mistake => {e.__str__()}"
         :return: dict a one person from selected by 'id'.
         """
         log.info(f"[{Library_Person.receive.__name__}] START")
-        text = f"[{Library_Person.receive.__name__}] END"
+        text = f"[{Library_Person.receive.__name__}]: "
         
         try:
             Model = self.get_model_name()
@@ -94,7 +105,7 @@ Index is invalid"
                 text = f"{text} Mistake => Not working index. \
 Index is invalid"
         except Exception as e:
-            text = f"[{Library_Person.receive.__name__}] \
+            text = f"[{text}] \
 Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
@@ -118,15 +129,15 @@ Mistake => {e.__str__()}"
         the everyone processing the very well. Or not
         """
         log.info(f"[{Library_Person.update.__name__}] START")
-        text = f"[{Library_Person.update.__name__}]"
+        text = f"[{Library_Person.update.__name__}]:"
         status = False
         try:
             # get data from db
             Model = self.get_model_name()
             authors = self.session.query(Model).filter_by(id=index).first()
             if not authors:
-                text = "".join(f"{text}  Mistake => Not working index. \
-Index is invalid")
+                text = f"{text}  Mistake => Not working index. \
+Index is invalid"
                 raise ValueError(text)
             attrib_list = [new_firstname_, new_secondname_, new_birthday_]
             # Here, need to find working attributes then will be change
@@ -149,10 +160,10 @@ was updated.")
                 text = "".join(f"{text}  Meaning this 'birthday' \
 was updated.")
             self.session.commit()
-            text = "".join(f"{text} Db was updated. END")
+            text = f"{text} Db was updated. END"
             status = True
         except Exception as e:
-            text = f"[{Library_Person.update.__name__}] \
+            text = f"{text} \
 Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
@@ -167,15 +178,15 @@ Mistake => {e.__str__()}"
         Not if 'False'
         """
         log.info(f"[{Library_Person.remove_one.__name__}] START")
-        text = f"[{Library_Person.remove_one.__name__}]"
+        text = f"[{Library_Person.remove_one.__name__}]:"
         status = False
         try:
             # get data from db
             Model = self.get_model_name()
             response: bool =await self.remove_one(index, Model)
             if not response:
-                text = "".join(f"{text}  Mistake => Not working index. \
-Index is invalid")
+                text = f"{text}  Mistake => Not working index. \
+Index is invalid"
                 raise ValueError(text)
             status = response
         except Exception as e:
