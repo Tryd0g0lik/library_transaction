@@ -1,15 +1,17 @@
 """Here are the API keys for work with books"""
 import json
 import logging
-from flask import (request, jsonify, flash, Response)
-from project.apps import app_ as app
-from project.transaction_some.transaction_book import Library_book
 from project.apps import csrf
+from project.apps import app_ as app
 from project.logs import configure_logging
+from flask import (request, jsonify, flash, Response)
+from project.transaction_some.transaction_book import Library_book
+from interfaces.interface_index_ganaretor import generate_register_numbers
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
+    
 async def book_api_path():
     @app.route("/api/v1/books/<int:index>", methods=["PUT"])
     @csrf.exempt
@@ -202,10 +204,12 @@ async def book_api_path():
                 )
                 flash(text)
             else:
+                register_numbers = generate_register_numbers()
                 result = await persone.add_one(
                     title_=data["title"] if data["title"] else "",
                     descriptions_=data["descriptions"] if data["descriptions"]
                     else "",
+                    register_number_=register_numbers[:50],
                     author_id_=data["author_id"] if data["author_id"] else "",
                     quantity_=data["quantity"] if data["quantity"] else "",
                 )

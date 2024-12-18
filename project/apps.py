@@ -8,7 +8,8 @@ from flask_bcrypt import Bcrypt
 from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.routing import BaseConverter
-
+# this is 'set()' the cloud for storage the book's registers.
+register_key = set()
 
 from dotenv_ import (SECRET_KEY, DSN, )
 

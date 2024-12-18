@@ -17,6 +17,7 @@ class Library_book(Library_basis):
     async def add_one(self,
                 title_: str,
                 descriptions_: str,
+                register_number_: str,
                 author_id_: int,
                 quantity_: int,
                 ) -> bool:
@@ -26,6 +27,8 @@ class Library_book(Library_basis):
          before 155.
         :param descriptions_: str. this is book's description. Max quantity
          symbols is before 255.
+         :param register_number_: This is register number. Mas quantity
+         symbols is before 50. It is unique book's nuber.
         :param author_id_: int. This number (index from db) author.
         :param quantity_: int.
         :return:
@@ -45,6 +48,7 @@ Mistake => Not found the author. 'author_id' is invalid."
                 book = Book(
                     title=title_,
                     descriptions=descriptions_,
+                    register_number=register_number_,
                     author_id=author_id_,
                     quantity=quantity_
                 )
@@ -110,7 +114,7 @@ Index is invalid."
         the everyone processing the very well. Or not
         """
         log.info(f"[{Library_book.update.__name__}] START")
-        text = f"[{Library_book.update.__name__}]"
+        text = f"[{Library_book.update.__name__}]:"
         status = False
         try:
             # get data from db
@@ -146,10 +150,10 @@ was updated")
                 status_text = "".join(f"{status_text}  Meaning this 'quantity' \
 was updated")
             self.session.commit()
-            text = "".join(f"{text} {status_text}. Db 'Book' was updated. END")
+            text = f"{text} {status_text}. Db 'Book' was updated. END"
             status = True
         except Exception as e:
-            text = f"[{Library_book.update.__name__}] \
+            text = f"{text} \
 Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
@@ -191,6 +195,7 @@ Index is invalid"
             "index": book.id,
             "title": book.title,
             "descriptions": book.descriptions,
+            "register_number": book.register_number,
             "author_id": book.author_id,
             "quantity": book.quantity
             

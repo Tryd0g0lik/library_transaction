@@ -15,6 +15,7 @@ class Book(Base):
 
     __tablename__ = "books"
     id = Column(Integer, primary_key=True)
+    register_number = Column(String(50), nullable=False, unique=True)
     title = Column(String(155), nullable=False, unique=True)
     descriptions = Column(Text)
     author_id = Column(Integer, ForeignKey("author.id"),

@@ -7,44 +7,63 @@ from datetime import datetime
 from project.logs import configure_logging
 from project.models_some.model_autors import Author
 from project.models_some.model_borrow import Borrow
+from project.models_some.model_client import Client
 from project.transaction_some.transaction_basic import Library_basis
+from project.transaction_some.transaction_book import Library_book
 from project.transaction_some.transaction_person import Library_Person
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
 class Library_Borrow(Library_basis):
-    async def add_one(self, book_id_: int, client_id_: int,
-                date_borrow_: datetime = datetime.utcnow,) -> bool:
+    async def add_one(self, book_id_: int,
+                      client_id_: int,
+                      date_borrow_: datetime = datetime.utcnow,
+                      date_return_: datetime = None) -> bool:
         """
         TODO: New borrow's line adds to the Model db's table
         :param book_id_: int. The book's index from 'Book'.
         :param client_id_: int. The Client's index from 'Client'.
         :param date_borrow_: datetime. This is datetime when the client
          received a book.
+         :param date_return_: datetime. This is datetime when the client
+         return a book.
         :return: bool. 'True' it means was created new line of db or not.
         """
         log.info(f"[{Library_Borrow.add_one.__name__}] START")
-        text = f"[{Library_Borrow.add_one.__name__}] END"
+        text = f"[{Library_Borrow.add_one.__name__}:"
         status = False
         try:
-            person = Library_Person(Author)
-            author = await person.receive(client_id_)
-    
-            if not author:
-                text = f"[{Library_Borrow.add_one.__name__}] \
-            Mistake => Not found the author. 'author_id' is invalid."
-                raise ValueError(text)
+            # The 'ID' checking in db
+            book = Library_book()
+            result_book = await book.receive(book_id_)
+            client = Library_Person(Client)
+            result_client = await client.receive(client_id_)
+            
+            for view in [result_client[0] if result_client else None,
+                         result_book[0] if result_client else None]:
+                if not view:
+                    text = f"{text} \
+    Mistake => Not found the author. 'author_id' is invalid."
+                    raise ValueError(text)
+                
+            """
+            There,  is need a CHECKING references now the client_id,book_id,
+            date_borrow and date_return, ALL from Borrow's db.
+            Client can take, then returns and after, his is to taking repeat a single book
+            """
+            # CREATE new a line
             borrow = Borrow(
                 book_id=book_id_,
-                client_id=author.id,
+                client_id=client_id_,
                 date_borrow=date_borrow_,
+                date_return=date_return_
             )
             self.session.add(borrow)
             self.session.commit()
             status = True
         except Exception as e:
-            text = f"[{Library_Borrow.add_one.__name__}]: \
+            text = f"{text} \
 Mistake => {e.__str__()}"
             raise ValueError(text)
         finally:
@@ -61,11 +80,11 @@ Mistake => {e.__str__()}"
         Not if 'False'
         """
         log.info(f"[{Library_Borrow.remove_one.__name__}] START")
-        text = f"[{Library_Borrow.remove_one.__name__}]"
+        text = f"[{Library_Borrow.remove_one.__name__}]:"
         status = False
         # get_one
         try:
-            response = await self.receive(index)
+            response = self.session.query(Borrow).filter_by(id=index).first()
             if not response:
                 text = text.join(
                     " Mistake => Not working index. \
