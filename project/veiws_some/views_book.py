@@ -24,7 +24,7 @@ async def book_api_path():
         - "quantity";
         - "title". Or the single attribute for changes. Index's attribute,
         it is number a book which we want to change.
-    
+    Format the date is 'year.month.day' or 'year-month-day'.
         Request is
          ```json
             {

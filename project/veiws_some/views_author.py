@@ -21,7 +21,7 @@ async def author_api_path():
         - 'firstname';
         - 'secondname';
         - 'birthday'.
-    
+        Format the date is 'year.month.day' or 'year-month-day'.
         Request is
          ```json
             {

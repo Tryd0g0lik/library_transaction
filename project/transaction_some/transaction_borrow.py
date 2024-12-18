@@ -84,19 +84,28 @@ Mistake => {e.__str__()}"
         status = False
         # get_one
         try:
+            
             response = self.session.query(Borrow).filter_by(id=index).first()
+            if not index:
+                response = self.session.query(Borrow).all()
+                
             if not response:
                 text = text.join(
                     " Mistake => Not working index. \
 Index is invalid")
                 raise ValueError(text)
-            status = True
+            status = [self.serialize(view) for view in ([response]
+                                                        if type(response) != list
+                                                        else response)
+                      ]
+            
         except Exception as  e:
             text = "".join(f"{text} Mistake => {e.__str__()}")
         finally:
             self.close()
             log.info(text)
             return status
+            
     
     async def update(self, index: int, book_id_: int = None, client_id_: int = None,
                date_borrow_: datetime = None, date_return_= datetime.utcnow):
@@ -147,11 +156,22 @@ Mistake => Object not found, was"
                 text = "".join(f"{text}  Meaning this 'date_return' was updated.")
             self.session.commit()
             text = "".join(f"{text}  Db 'Borrow' was updated. END")
+            status = True
         except Exception as e:
             text = f"[{Library_Borrow.update.__name__}] \
 Mistake => {e.__str__()}"
+            
             raise ValueError(text)
         finally:
             self.close()
             log.info(text)
             return status
+        
+    def serialize(self, borrow):
+        return {
+            "index": borrow.id if borrow.id else None,
+            "book_id": borrow.book_id if borrow.book_id else None,
+            "client_id": borrow.client_id if borrow.client_id else None,
+            "date_borrow": borrow.date_borrow if borrow.date_borrow else None,
+            "date_return": borrow.date_return if borrow.date_return else None
+        }
