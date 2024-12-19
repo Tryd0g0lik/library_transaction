@@ -125,7 +125,7 @@ Index is invalid")
     
     async def update(self, index: int, book_id_: int = None,
                      client_id_: int = None,
-                     quantity_: int = 1,
+                     quantity_: int = None,
                      date_borrow_: datetime = None,
                      date_return_: datetime = datetime.utcnow):
         """
@@ -135,6 +135,9 @@ Index is invalid")
         :param index: int. THis is the model's ID.
         :param book_id_: int. The book's index from 'Book'. Default is 'None'
         :param client_id_: int. The Client's index from 'Client'.
+         Default is 'None'
+        :param quantity_: int. The books quantity take an one client.
+         These books have an one/single/common name.
          Default is 'None'
         :param date_borrow_: datetime. This is datetime when the client
          received a book.  Default is 'None'
@@ -173,6 +176,11 @@ Mistake => Object not found, was"
             if date_return_:
                 borrow.date_return = date_return_
                 text = "".join(f"{text}  Meaning this 'date_return' was updated.")
+            if quantity_:
+              """
+              меняем количество в зависимости от возврата или выдачи
+              """
+
             self.session.commit()
             text = f"{text}  Db 'Borrow' was updated. END"
             status = True
