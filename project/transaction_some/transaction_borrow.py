@@ -177,6 +177,8 @@ Mistake => Object not found, was"
                 borrow.date_return = date_return_
                 text = "".join(f"{text}  Meaning this 'date_return' was updated.")
             if quantity_:
+                # Book quantity we make more
+    
                 """
                 меняем количество книг в зависимости от:
                 - возврата или выдачи книг;
@@ -208,21 +210,7 @@ Mistake => Object not found, was"
             self.session.commit()
             text = f"{text}  Db 'Borrow' was updated. END"
             status = True
-            # Book quantity we make more
-            book = self.session.query(Book).filter_by(id=int(book_id_)).first()
-            if not book:
-               text = f"{text} \
-Mistake => Not found a book. 'book_id_' is invalid."
-               status = False
-            if (date_borrow_ and date_return_) and\
-                (date_borrow_ < date_return_):
-                book.quantity +=1
-            elif (date_borrow_ and not date_return_):
-                book.quantity -=1
-            elif (date_borrow_ and date_return_) and \
-              (date_borrow_ > date_return_):
-                pass
-            self.session.commit()
+            
 
         except Exception as e:
             text = f"[{Library_Borrow.update.__name__}] \
