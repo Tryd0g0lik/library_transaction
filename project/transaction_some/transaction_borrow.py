@@ -48,23 +48,25 @@ class Library_Borrow(Library_basis):
             result_client = await client.receive(client_id_)
     
             for view in [result_client[0] if result_client else None,
-                         result_book[0] if result_client else None]:
+                         result_book[0] if result_book else None]:
                 if not view:
                     text = f"{text} \
-    Mistake => Not found the author. 'author_id' is invalid."
+Mistake => Not found the client or book. 'client_id_' or 'book_id_' is invalid."
                     raise ValueError(text)
-    
-            # CREATE new a line
-            borrow = Borrow(
-                book_id=book_id_,
-                client_id=client_id_,
-                date_borrow=date_borrow_,
-                date_return=date_return_
-            )
-            # Book quantity we make less
-            book = self.session.query(Book).filter_by(id=int(book_id_)).first()
+            if result_book[0]["quantity"] > 0:
+                # CREATE new a line
+                borrow = Borrow(
+                    book_id=book_id_,
+                    client_id=client_id_,
+                    date_borrow=date_borrow_,
+                    date_return=date_return_
+                )
+                # One client take the one a book from library
+                self.session.add(borrow)
+                self.session.commit()
+                # Book quantity we make less
+                book = self.session.query(Book).filter_by(id=book_id_).first()
             
-            if book.quantity > 0:
                 if date_borrow_ and not date_return_:
                     book.quantity -= 1 if not quantity_ else quantity_
                     self.session.commit()
@@ -73,9 +75,7 @@ class Library_Borrow(Library_basis):
                 if date_borrow_ and date_return_:
                     book.quantity += 1 if not quantity_ else quantity_
                     self.session.commit()
-                # One client take the one a book from library
-                self.session.add(borrow)
-                self.session.commit()
+               
                 status = True
         except Exception as e:
             text = f"{text} \

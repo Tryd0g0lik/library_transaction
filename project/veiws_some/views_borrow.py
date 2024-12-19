@@ -128,10 +128,8 @@ async def borrow_api_apth():
             key_list = list(data.keys())
             if "book_id" not in key_list or "client_id" not in key_list or \
               "date_borrow" not in key_list:
-                text = "".join(
-                    f"{text} Does not have a 'book_id' or 'client_id' \
+                text = f"{text} Does not have a 'book_id' or 'client_id' \
 or 'date_borrow'"
-                    )
                 flash(text)
             else:
                 date_return = \
@@ -146,7 +144,7 @@ or 'date_borrow'"
                     else 1,
                     )
                 text = f"{text}  END"
-                return jsonify({"message": text}), 200
+                return jsonify({"message": "OK"}), 200
         except Exception as e:
             text = f"{text} Mistake => {e.__str__()}"
             raise ValueError(text)
