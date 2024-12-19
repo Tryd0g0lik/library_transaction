@@ -193,9 +193,17 @@ Mistake => Object not found, was"
                 что опять раздует код.
                 .
                 .
-                Как проще проверить?
+                Как проще сделать?
 """
-                pass
+                # This is only plug/empty, below
+                if borrow.date_return and (
+                  borrow.date_return > borrow.date_borrow
+                ):
+                    borrow.books.quantity +=1
+                elif borrow.date_borrow and quantity_ and \
+                    not borrow.date_return:
+                    borrow.books.quantity -= 1
+                    
 
             self.session.commit()
             text = f"{text}  Db 'Borrow' was updated. END"
