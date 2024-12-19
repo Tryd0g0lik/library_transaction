@@ -100,8 +100,8 @@ Mistake => {e.__str__()}"
                 text = f"{text} Mistake => Not working index. \
 Index is invalid"
             
+            text = f"{text} END"
             return model
-        
         except Exception as e:
             text = f"[{text}] \
 Mistake => {e.__str__()}"

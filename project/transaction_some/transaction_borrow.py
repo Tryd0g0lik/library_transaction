@@ -38,7 +38,7 @@ class Library_Borrow(Library_basis):
          a mistake or the book quantity equal is zero.
         """
         log.info(f"[{Library_Borrow.add_one.__name__}] START")
-        text = f"[{Library_Borrow.add_one.__name__}:"
+        text = f"[{Library_Borrow.add_one.__name__}]:"
         status = False
         try:
             # The 'ID' checking in db
@@ -77,6 +77,7 @@ Mistake => Not found the client or book. 'client_id_' or 'book_id_' is invalid."
                     self.session.commit()
                
                 status = True
+            text = f"{text} END"
         except Exception as e:
             text = f"{text} \
 Mistake => {e.__str__()}"

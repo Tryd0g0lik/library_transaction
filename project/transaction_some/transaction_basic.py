@@ -99,6 +99,7 @@ class Library_basis:
                 models = self.session.query(Model).all()
                 
                 status = [self.serialize(view) for view in models]
+            text = f"{text} END"
         except Exception as e:
             text = f"{text} Mistake => {e.__str__()}"
             raise ValueError(text)
