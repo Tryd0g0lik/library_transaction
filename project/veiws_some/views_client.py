@@ -1,13 +1,16 @@
 """Here are the API keys for work with clients"""
+
 import json
 import logging
 from datetime import datetime
-from flask import (request, jsonify, flash, Response)
+
+from flask import Response, flash, jsonify, request
+
 from project.apps import app_ as app
-from project.models_some.model_client import Client
-from project.transaction_some.transaction_person import Library_Person
 from project.apps import csrf
 from project.logs import configure_logging
+from project.models_some.model_client import Client
+from project.transaction_some.transaction_person import Library_Person
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
@@ -46,12 +49,12 @@ async def сlient_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-            
+
             person = Library_Person(Client)
             response["result"] = await person.update(
                 index,
                 new_firstname_=data["firstname"] if data["firstname"] else "",
-                new_birthday_=data["birthday"] if data["birthday"] else None
+                new_birthday_=data["birthday"] if data["birthday"] else None,
             )
             text = "".join(f"{text}  END")
         except Exception as e:
@@ -60,7 +63,7 @@ async def сlient_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
+
     @app.route("/api/v1/clients/<int:index>", methods=["DELETE"])
     @csrf.exempt
     async def сlient_one_remove(index):
@@ -81,12 +84,12 @@ async def сlient_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-            
+
             person = Library_Person(Client)
             result = await person.removing(index)
             if not result:
                 response["message"] = "Not OK"
-            
+
             response["result"] = result
             text = "".join(f"{text}  END")
         except Exception as e:
@@ -95,7 +98,7 @@ async def сlient_api_path():
         finally:
             log.info(text)
             return jsonify(response), 400
-    
+
     @app.route("/api/v1/clients/<int:index>", methods=["GET"])
     async def сlient_one_get(index):
         """
@@ -119,7 +122,7 @@ async def сlient_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-            
+
             person = Library_Person(Client)
             response["result"] = await person.receive(index)
             text = "".join(f"{text}  END")
@@ -129,7 +132,7 @@ async def сlient_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
+
     @app.route("/api/v1/clients", methods=["GET"])
     async def сlient_get():
         """
@@ -161,7 +164,7 @@ async def сlient_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
+
     @app.route("/api/v1/clients", methods=["POST"])
     @csrf.exempt
     async def сlient_add() -> Response:
@@ -172,16 +175,13 @@ async def сlient_api_path():
             persone = Library_Person(Client)
             key_list = list(data.keys())
             if "firstname" not in key_list:
-                text = "".join(
-                    f"{text}  Does not have a 'firstname'"
-                )
+                text = "".join(f"{text}  Does not have a 'firstname'")
                 flash(text)
             else:
-                birthday = \
-                    data["birthday"] if data["birthday"] else datetime.utcnow()
+                birthday = data["birthday"] if data["birthday"] else datetime.utcnow()
                 await persone.add_one(
                     firstname_=data["firstname"] if data["firstname"] else "",
-                    birthday_= birthday
+                    birthday_=birthday,
                 )
                 text = f"{text}  END"
                 return jsonify({"message": text}), 200

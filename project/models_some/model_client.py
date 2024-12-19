@@ -1,5 +1,7 @@
+from sqlalchemy import Column, Integer
+
 from project.models_some.model_person import Person
-from sqlalchemy import (Column, Integer)
+
 
 class Client(Person):
     """
@@ -8,6 +10,7 @@ class Client(Person):
     :param secondname: str. Authors's secondname.
     :param birthday: datetime.
     """
+
     __tablename__ = "client"
     # id = Column(Integer, primary_key=True)
 

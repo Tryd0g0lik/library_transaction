@@ -1,4 +1,5 @@
 """This finds a new 'register_number' for a book from the Book's db."""
+
 import uuid
 
 from project.apps import register_key
@@ -11,14 +12,14 @@ def generate_register_numbers():
           and if is it unique, we ('_number') to saving in tuple (set())
         If it is not unique , returns the re-start this function.
         We want to find/create the book's unique number.
-        
+
     :param register_number: set()/tuple.
     :return: number: str. It has the length a symbol's quantity is 50
     """
-    
+
     set_numbers = []
     status = True
-    
+
     while status:
         _number = uuid.uuid4()
         # CHECK LENGTH 'set_numbers' if > 0
@@ -29,8 +30,6 @@ def generate_register_numbers():
             register_key.add(str(_number))
             status = False
             return str(_number)[:50]
-        
+
         if not register_key.isdisjoint(str(_number)):
             set_numbers.append(str(_number))
-        
-            

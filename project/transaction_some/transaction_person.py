@@ -5,13 +5,16 @@ To the entrypoint we receive only one model. It's  from 'Client' or 'Author'.
 Then, everyone methods from the Library_Person's class has as common for
 working with 'Author' and 'Client' models
 """
-from typing import (Type, Union)
+
 import logging
 from datetime import datetime
-from project.transaction_some.transaction_basic import Library_basis
+from typing import Type, Union
+
+from project.logs import configure_logging
 from project.models_some.model_autors import Author
 from project.models_some.model_client import Client
-from project.logs import configure_logging
+from project.transaction_some.transaction_basic import Library_basis
+
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
@@ -21,26 +24,27 @@ class Library_Person(Library_basis):
     Here, is a DYNAMICALLY class for work with tabular models from db.
     This tabular models it means the 'Author' and 'Client' models.
     """
-    def __init__(self,  model_name: type[Author | Client]):
+
+    def __init__(self, model_name: type[Author | Client]):
         """
-        TODO: To the entrypoint we receive only one model. It's  
+        TODO: To the entrypoint we receive only one model. It's
             from 'Client' or 'Author'.
         :param model: type[Union[Author, Client]]
         """
         super().__init__()
         self.__model_name = model_name
 
-    def get_model_name(self) ->type[Author | Client]:
+    def get_model_name(self) -> type[Author | Client]:
         """
-        TODO: Receives a value from a private variable. This a variable 
+        TODO: Receives a value from a private variable. This a variable
             means the 'Author' and 'Client' models
         :return: type[Union[Author, Client]]
         """
         return self.__model_name
 
-    async def add_one(self, firstname_:str,
-            secondname_:str=None,
-            birthday_: datetime = None) -> bool:
+    async def add_one(
+        self, firstname_: str, secondname_: str = None, birthday_: datetime = None
+    ) -> bool:
         """
         TODO: New model's line adds to the Model db's table
         :param firstname_: str. The person's firstname.
@@ -56,15 +60,11 @@ class Library_Person(Library_basis):
             Model = self.get_model_name()
             model = None
             if secondname_:
-                model = Model(firstname=firstname_,
-                                secondname=secondname_,
-                                birthday=birthday
-                                )
-            else:
                 model = Model(
-                    firstname=firstname_,
-                    birthday=birthday
-                    )
+                    firstname=firstname_, secondname=secondname_, birthday=birthday
+                )
+            else:
+                model = Model(firstname=firstname_, birthday=birthday)
             if not model:
                 text = f"{text} Something what wrong with 'model'!"
                 raise ValueError(text)
@@ -81,7 +81,7 @@ Mistake => {e.__str__()}"
             self.close()
             log.info(text)
             return status
-        
+
     async def receive(self, index: int = None) -> type[Author | Client]:
         """
         TODO: Select tne one person from the 'Model' db's table.
@@ -90,16 +90,16 @@ Mistake => {e.__str__()}"
         """
         log.info(f"[{Library_Person.receive.__name__}] START")
         text = f"[{Library_Person.receive.__name__}]: "
-        
+
         try:
             Model = self.get_model_name()
-        
+
             # model = self.session(Model).query.filter_by(id=index).first()
             model = await self.get_one(Model, index)
             if not model:
                 text = f"{text} Mistake => Not working index. \
 Index is invalid"
-            
+
             text = f"{text} END"
             return model
         except Exception as e:
@@ -109,10 +109,14 @@ Mistake => {e.__str__()}"
         finally:
             self.close()
             log.info(text)
-            
-    async def update(self, index:int, new_firstname_:str = None,
-            new_secondname_:str = None,
-            new_birthday_:str=None) -> bool:
+
+    async def update(
+        self,
+        index: int,
+        new_firstname_: str = None,
+        new_secondname_: str = None,
+        new_birthday_: str = None,
+    ) -> bool:
         """
         TODO: New data, we receive for entrypoint, for update the model's data \
             from tabel db. From entrypoint we can receive one \
@@ -145,18 +149,22 @@ Index is invalid"
                 text = "".join(f"{text}  Mistake => Object not found, was.")
                 log.info(text)
                 raise ValueError(text)
-            
+
             if new_firstname_:
                 authors.firstname = new_firstname_
                 text = "".join(f"{text}  Meaning this 'firstname' was updated.")
             if new_secondname_:
                 authors.secondname = new_secondname_
-                text = "".join(f"{text}  Meaning this 'secondname' \
-was updated.")
+                text = "".join(
+                    f"{text}  Meaning this 'secondname' \
+was updated."
+                )
             if new_birthday_:
                 authors.birthday = new_birthday_
-                text = "".join(f"{text}  Meaning this 'birthday' \
-was updated.")
+                text = "".join(
+                    f"{text}  Meaning this 'birthday' \
+was updated."
+                )
             self.session.commit()
             text = f"{text} Db was updated. END"
             status = True
@@ -168,6 +176,7 @@ Mistake => {e.__str__()}"
             self.close()
             log.info(text)
             return status
+
     async def removing(self, index: int) -> bool:
         """
         TODO: Delete an one db's line from db.
@@ -181,7 +190,7 @@ Mistake => {e.__str__()}"
         try:
             # get data from db
             Model = self.get_model_name()
-            response: bool =await self.remove_one(index, Model)
+            response: bool = await self.remove_one(index, Model)
             if not response:
                 text = f"{text}  Mistake => Not working index. \
 Index is invalid"

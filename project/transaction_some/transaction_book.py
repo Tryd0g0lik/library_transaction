@@ -2,25 +2,29 @@
 Here is a logic for work with the db Book's transactions .
 This is a management for control
 """
+
 import logging
+
+from project.logs import configure_logging
 from project.models_some.model_autors import Author
 from project.models_some.model_book import Book
 from project.transaction_some.transaction_basic import Library_basis
-from project.logs import configure_logging
 from project.transaction_some.transaction_person import Library_Person
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
+
 class Library_book(Library_basis):
-    
-    async def add_one(self,
-                title_: str,
-                descriptions_: str,
-                register_number_: str,
-                author_id_: int,
-                quantity_: int,
-                ) -> bool:
+
+    async def add_one(
+        self,
+        title_: str,
+        descriptions_: str,
+        register_number_: str,
+        author_id_: int,
+        quantity_: int,
+    ) -> bool:
         """
         TODO: New model's line adds to the Books db's table
         :param title_: str.  This is book's name. Max quantity symbols is
@@ -35,22 +39,22 @@ class Library_book(Library_basis):
         """
         log.info(f"[{Library_book.add_one.__name__}] START")
         status = False
-        text=f"[{Library_book.add_one.__name__}] END"
+        text = f"[{Library_book.add_one.__name__}] END"
         try:
             person = Library_Person(Author)
             author = await person.receive(author_id_)
-            
+
             if not author:
                 text = f"[{Library_book.add_one.__name__}] \
 Mistake => Not found the author. 'author_id' is invalid."
             else:
-                
+
                 book = Book(
                     title=title_,
                     descriptions=descriptions_,
                     register_number=register_number_,
                     author_id=author_id_,
-                    quantity=quantity_
+                    quantity=quantity_,
                 )
                 self.session.add(book)
                 self.session.commit()
@@ -94,12 +98,15 @@ Index is invalid."
             self.close()
             log.info(text)
             return status
-    
-    async def update(self,index:int, new_title_: str = None,
-               new_descriptions_:str = None,
-               new_author_id_:int = None,
-               new_quantity_:int = None
-               ) -> bool:
+
+    async def update(
+        self,
+        index: int,
+        new_title_: str = None,
+        new_descriptions_: str = None,
+        new_author_id_: int = None,
+        new_quantity_: int = None,
+    ) -> bool:
         """
         TODO: New data, we receive from entrypoint, for update the Book's data, \
             from tabel db. From entrypoint we can receive one \
@@ -123,8 +130,7 @@ Index is invalid."
                 text = f"[{text} \
 Mistake => Not working index. Index is invalid"
                 raise ValueError(text)
-            attrib_list = [new_title_, new_descriptions_,
-                           new_author_id_, new_quantity_]
+            attrib_list = [new_title_, new_descriptions_, new_author_id_, new_quantity_]
             # Here, need to find working attributes then will be change
             # data in db
             working_attrib = [view for view in attrib_list if view]
@@ -139,16 +145,22 @@ Mistake => Object not found, was"
 was updated."
             if new_descriptions_:
                 book.descriptions = new_descriptions_
-                status_text = "".join(f"{status_text}  Meaning this 'description' \
-was updated")
+                status_text = "".join(
+                    f"{status_text}  Meaning this 'description' \
+was updated"
+                )
             if new_author_id_:
                 book.author_id = new_author_id_
-                status_text = "".join(f"{status_text}  Meaning this 'authors \
-was updated")
+                status_text = "".join(
+                    f"{status_text}  Meaning this 'authors \
+was updated"
+                )
             if new_quantity_:
                 book.quantity = new_quantity_
-                status_text = "".join(f"{status_text}  Meaning this 'quantity' \
-was updated")
+                status_text = "".join(
+                    f"{status_text}  Meaning this 'quantity' \
+was updated"
+                )
             self.session.commit()
             text = f"{text} {status_text}. Db 'Book' was updated. END"
             status = True
@@ -189,7 +201,7 @@ Index is invalid"
             self.close()
             log.info(text)
             return status
-            
+
     def serialize(self, book):
         return {
             "index": book.id,
@@ -197,6 +209,5 @@ Index is invalid"
             "descriptions": book.descriptions,
             "register_number": book.register_number,
             "author_id": book.author_id,
-            "quantity": book.quantity
-            
+            "quantity": book.quantity,
         }

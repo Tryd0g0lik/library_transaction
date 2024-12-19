@@ -1,16 +1,20 @@
 """Here are the API keys for work with authors"""
+
 import json
 import logging
 from datetime import datetime
-from flask import (request, jsonify, flash, Response)
+
+from flask import Response, flash, jsonify, request
+
 from project.apps import app_ as app
-from project.models_some.model_autors import Author
-from project.transaction_some.transaction_person import Library_Person
 from project.apps import csrf
 from project.logs import configure_logging
+from project.models_some.model_autors import Author
+from project.transaction_some.transaction_person import Library_Person
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
+
 
 async def author_api_path():
     @app.route("/api/v1/authors/<int:index>", methods=["PUT"])
@@ -47,13 +51,14 @@ async def author_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-            
+
             person = Library_Person(Author)
             response["result"] = await person.update(
                 index,
                 new_firstname_=data["firstname"] if data["firstname"] else "",
                 new_secondname_=data["secondname"] if data["secondname"] else "",
-                new_birthday_=data["birthday"] if data["birthday"] else None)
+                new_birthday_=data["birthday"] if data["birthday"] else None,
+            )
             text = "".join(f"{text}  END")
         except Exception as e:
             text = "".join(f"{text} Mistake => {e.__str__()}")
@@ -61,12 +66,12 @@ async def author_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
+
     @app.route("/api/v1/authors/<int:index>", methods=["DELETE"])
     @csrf.exempt
     async def author_one_remove(index):
         """
-        
+
         :param index:
         :return: ```json
         {
@@ -82,12 +87,12 @@ async def author_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-        
+
             person = Library_Person(Author)
             result = await person.removing(index)
             if not result:
                 response["message"] = "Not OK"
-            
+
             response["result"] = result
             text = "".join(f"{text}  END")
         except Exception as e:
@@ -96,8 +101,7 @@ async def author_api_path():
         finally:
             log.info(text)
             return jsonify(response), 400
-    
-    
+
     @app.route("/api/v1/authors/<int:index>", methods=["GET"])
     async def author_one_get(index):
         """
@@ -122,7 +126,7 @@ async def author_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-            
+
             person = Library_Person(Author)
             response["result"] = await person.receive(index)
             text = "".join(f"{text}  END")
@@ -132,8 +136,7 @@ async def author_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
-    
+
     @app.route("/api/v1/authors", methods=["GET"])
     async def author_get():
         """
@@ -150,7 +153,7 @@ async def author_api_path():
                     "secondname": "Igorev"
                 }
             ]
-    
+
         ```
         """
         response = {"message": "Ok", "result": None}
@@ -166,8 +169,7 @@ async def author_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
-    
+
     @app.route("/api/v1/authors", methods=["POST"])
     @csrf.exempt
     async def author_add() -> Response:
@@ -178,19 +180,15 @@ async def author_api_path():
             persone = Library_Person(Author)
             key_list = list(data.keys())
             if "firstname" not in key_list or "secondname" not in key_list:
-                text = "".join(
-                    f"{text}  Does not have a 'firstname' or 'secondname'"
-                    )
+                text = "".join(f"{text}  Does not have a 'firstname' or 'secondname'")
                 flash(text)
             else:
-                birthday = \
-                    data["birthday"] if data["birthday"] else datetime.utcnow()
+                birthday = data["birthday"] if data["birthday"] else datetime.utcnow()
                 await persone.add_one(
                     firstname_=data["firstname"] if data["firstname"] else "",
-                    secondname_=data["secondname"] if data[
-                        "secondname"] else "",
-                    birthday_=data["birthday"] if data["birthday"] else None
-                    )
+                    secondname_=data["secondname"] if data["secondname"] else "",
+                    birthday_=data["birthday"] if data["birthday"] else None,
+                )
                 text = f"{text}  END"
                 return jsonify({"message": text}), 200
         except Exception as e:
@@ -199,5 +197,3 @@ async def author_api_path():
         finally:
             flash(text)
             log.info(text)
-            
-    

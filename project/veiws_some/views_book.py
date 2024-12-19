@@ -1,59 +1,63 @@
 """Here are the API keys for work with books"""
+
 import json
 import logging
-from project.apps import csrf
+
+from flask import Response, flash, jsonify, request
+
 from project.apps import app_ as app
+from project.apps import csrf
+from project.interfaces.interface_index_ganaretor import \
+  generate_register_numbers
 from project.logs import configure_logging
-from flask import (request, jsonify, flash, Response)
 from project.transaction_some.transaction_book import Library_book
-from project.interfaces.interface_index_ganaretor import generate_register_numbers
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
-    
+
 async def book_api_path():
     @app.route("/api/v1/books/<int:index>", methods=["PUT"])
     @csrf.exempt
     async def book_one_change(index):
         """
-        Here, can change the one or everything Book's attributes from: \n
-        - "author_id";
-        - "descriptions";
-        - "index";
-        - "quantity";
-        - "title". Or the single attribute for changes. Index's attribute,
-        it is number a book which we want to change.
-    Format the date is 'year.month.day' or 'year-month-day'.
-        Request is
-         ```json
+            Here, can change the one or everything Book's attributes from: \n
+            - "author_id";
+            - "descriptions";
+            - "index";
+            - "quantity";
+            - "title". Or the single attribute for changes. Index's attribute,
+            it is number a book which we want to change.
+        Format the date is 'year.month.day' or 'year-month-day'.
+            Request is
+             ```json
+                {
+                    "title":"title Big book",
+                    "descriptions":"descriptions descriptions ",
+                    "author_id":1,
+                    "quantity":24
+                }
+            ``` or the single from over code. Example is the code below:
+            ```jsom
             {
-                "title":"title Big book",
-                "descriptions":"descriptions descriptions ",
-                "author_id":1,
-                "quantity":24
+                "title":null,
+                "descriptions":null,
+                "author_id":2,
+                "quantity":null
             }
-        ``` or the single from over code. Example is the code below:
-        ```jsom
-        {
-            "title":null,
-            "descriptions":null,
-            "author_id":2,
-            "quantity":null
-        }
-        # or
-        {
-            "author_id":2
-        }
-        ```
-        Over is a code for an entrypoint.
-        :param index: int. Index from db..
-        :return: ```json
-        {
-            "message": "Ok", \n
-            "result": true # or false \n
-        }
-        ``` and the status code = 200
+            # or
+            {
+                "author_id":2
+            }
+            ```
+            Over is a code for an entrypoint.
+            :param index: int. Index from db..
+            :return: ```json
+            {
+                "message": "Ok", \n
+                "result": true # or false \n
+            }
+            ``` and the status code = 200
         """
         data = json.loads(request.data)
         response = {"message": "Ok", "result": None}
@@ -67,8 +71,9 @@ async def book_api_path():
                 result: bool = await person.update(
                     index,
                     new_title_=data["title"] if data["title"] else "",
-                    new_descriptions_=data["descriptions"] if data["descriptions"]
-                    else "",
+                    new_descriptions_=(
+                        data["descriptions"] if data["descriptions"] else ""
+                    ),
                     new_author_id_=data["author_id"] if data["author_id"] else "",
                     new_quantity_=data["quantity"] if data["quantity"] else "",
                 )
@@ -81,10 +86,10 @@ async def book_api_path():
         finally:
             log.info(text)
             return jsonify(response), 200
-        
+
     @app.route("/api/v1/books/<int:index>", methods=["DELETE"])
     @csrf.exempt
-    async def book_one_remove(index:int = None):
+    async def book_one_remove(index: int = None):
         """
         We create a request by API's reference '/api/v1/books/{index}'
         and method "DELETE".
@@ -111,17 +116,17 @@ async def book_api_path():
                 response["message"] = "Not OK"
             response["result"] = result
             text = f"{text}  END"
-            
+
         except Exception as e:
             text = f"{text} Mistake => {e.__str__()}"
             response["message"] = text
         finally:
             log.info(text)
             return jsonify(response), status_code
-        
+
     @app.route("/api/v1/books", methods=["GET"])
     @app.route("/api/v1/books/<int:index>", methods=["GET"])
-    async def book_get(index:int = None):
+    async def book_get(index: int = None):
         """
         We create a request by API's reference '/api/v1/books' and method "GET".
         It returns the all books from db.
@@ -142,7 +147,7 @@ async def book_api_path():
                     }
                 ]
             }
-    
+
         ```
         or
         ```json
@@ -170,7 +175,7 @@ async def book_api_path():
         finally:
             log.info(text)
             return jsonify(response), status_code
-    
+
     @app.route("/api/v1/books", methods=["POST"])
     @csrf.exempt
     async def book_add() -> Response:
@@ -196,8 +201,12 @@ async def book_api_path():
         try:
             persone = Library_book()
             key_list = list(data.keys())
-            if "title" not in key_list or "descriptions" not in key_list or\
-                "author_id" not in key_list or "quantity" not in key_list:
+            if (
+                "title" not in key_list
+                or "descriptions" not in key_list
+                or "author_id" not in key_list
+                or "quantity" not in key_list
+            ):
                 text = "".join(
                     f"{text}  Does not have a 'title' or 'descriptions', \
     or 'author_id', or 'quantity'"
@@ -207,8 +216,7 @@ async def book_api_path():
                 register_numbers = generate_register_numbers()
                 result = await persone.add_one(
                     title_=data["title"] if data["title"] else "",
-                    descriptions_=data["descriptions"] if data["descriptions"]
-                    else "",
+                    descriptions_=data["descriptions"] if data["descriptions"] else "",
                     register_number_=register_numbers[:50],
                     author_id_=data["author_id"] if data["author_id"] else "",
                     quantity_=data["quantity"] if data["quantity"] else "",
@@ -217,7 +225,7 @@ async def book_api_path():
                 if not result:
                     text = f"{text}  Something what wrong! False"
                     return jsonify({"message": text}), 400
-                    
+
                 return jsonify({"message": "Ok"}), 200
         except Exception as e:
             text = f"{text}Mistake => {e.__str__()}"
@@ -225,4 +233,3 @@ async def book_api_path():
         finally:
             flash(text)
             log.info(text)
-    

@@ -1,20 +1,21 @@
+"""Here are the API keys for work with clients and books"""
+
 import json
 import logging
-from datetime import datetime
-from flask import (request, jsonify, flash, Response)
+
+from flask import Response, flash, jsonify, request
+
 from project.apps import app_ as app
-from project.models_some.model_borrow import Borrow
-from project.models_some.model_autors import Author
-from project.transaction_some.transaction_borrow import Library_Borrow
-from project.transaction_some.transaction_person import Library_Person
 from project.apps import csrf
 from project.logs import configure_logging
+from project.transaction_some.transaction_borrow import Library_Borrow
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)
 
+
 async def borrow_api_apth():
-    
+
     @app.route("/api/v1/borrows/<int:index>/return", methods=["PATCH"])
     @csrf.exempt
     async def borrow_one_change(index):
@@ -71,12 +72,9 @@ async def borrow_api_apth():
                     index,
                     book_id_=data["book_id"] if data["book_id"] else None,
                     client_id_=data["client_id"] if data["client_id"] else None,
-                    date_borrow_=data["date_borrow"] if data["date_borrow"]
-                    else None,
-                    date_return_=data["date_return"] if data["date_return"]
-                    else None,
-                    quantity_=data["quantity"] if data["quantity"]
-                    else None,
+                    date_borrow_=data["date_borrow"] if data["date_borrow"] else None,
+                    date_return_=data["date_return"] if data["date_return"] else None,
+                    quantity_=data["quantity"] if data["quantity"] else None,
                 )
                 if not result:
                     response["message"] = "Not OK"
@@ -87,7 +85,7 @@ async def borrow_api_apth():
         finally:
             log.info(text)
             return jsonify(response), 200
-    
+
     @app.route("/api/v1/borrows", methods=["POST"])
     @csrf.exempt
     async def borrow_add() -> Response:
@@ -117,32 +115,32 @@ async def borrow_api_apth():
                     {"message": "Ok"} // or
                     // {"message":"[get_one] Something what wrong! False"}
                 ```
-                """
+        """
         data = json.loads(request.data)
         text = f"[{borrow_add.__name__}]:"
         log.info(f"{text} START")
         try:
             pass
             book = Library_Borrow()
-            
+
             key_list = list(data.keys())
-            if "book_id" not in key_list or "client_id" not in key_list or \
-              "date_borrow" not in key_list:
+            if (
+                "book_id" not in key_list
+                or "client_id" not in key_list
+                or "date_borrow" not in key_list
+            ):
                 text = f"{text} Does not have a 'book_id' or 'client_id' \
 or 'date_borrow'"
                 flash(text)
             else:
-                date_return = \
-                    data["date_return"] if data["date_return"] else None
+                date_return = data["date_return"] if data["date_return"] else None
                 await book.add_one(
                     book_id_=data["book_id"] if data["book_id"] else None,
                     client_id_=data["client_id"] if data["client_id"] else None,
-                    date_borrow_=data["date_borrow"] if data["date_borrow"]
-                    else None,
+                    date_borrow_=data["date_borrow"] if data["date_borrow"] else None,
                     date_return_=date_return,
-                    quantity_=data["quantity"] if data["quantity"]
-                    else 1,
-                    )
+                    quantity_=data["quantity"] if data["quantity"] else 1,
+                )
                 text = f"{text}  END"
                 return jsonify({"message": "OK"}), 200
         except Exception as e:
@@ -208,8 +206,9 @@ a quantity. Something what wrong with the book quantity."
             If the 'chacker_quantity' has length more when zero,
             for
             """
-            chacker_quantity = \
-                [view for view in response["result"] if not view["quantity"]]
+            chacker_quantity = [
+                view for view in response["result"] if not view["quantity"]
+            ]
             if len(chacker_quantity) > 0:
                 text = f"{text} \
 Mistake => Not received a quantity. Something what wrong with \
