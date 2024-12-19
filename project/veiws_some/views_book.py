@@ -6,7 +6,7 @@ from project.apps import app_ as app
 from project.logs import configure_logging
 from flask import (request, jsonify, flash, Response)
 from project.transaction_some.transaction_book import Library_book
-from interfaces.interface_index_ganaretor import generate_register_numbers
+from project.interfaces.interface_index_ganaretor import generate_register_numbers
 
 configure_logging(logging.INFO)
 log = logging.getLogger(__name__)

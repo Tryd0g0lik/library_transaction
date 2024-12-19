@@ -5,7 +5,7 @@ This is a management for control
 import logging
 from datetime import datetime
 from project.logs import configure_logging
-from project.models_some.model_autors import Author
+from project.models_some.model_book import Book
 from project.models_some.model_borrow import Borrow
 from project.models_some.model_client import Client
 from project.transaction_some.transaction_basic import Library_basis
@@ -19,16 +19,23 @@ class Library_Borrow(Library_basis):
     async def add_one(self, book_id_: int,
                       client_id_: int,
                       date_borrow_: datetime = datetime.utcnow,
-                      date_return_: datetime = None) -> bool:
+                      date_return_: datetime = None,
+                      quantity_: int = 1) -> bool:
+                      
         """
-        TODO: New borrow's line adds to the Model db's table
+        TODO: New borrow's is line adds to the Model db's table.
+            There is checking of book quantity. If client received a book,
+            we have the book quantity state to the less
+          
         :param book_id_: int. The book's index from 'Book'.
         :param client_id_: int. The Client's index from 'Client'.
         :param date_borrow_: datetime. This is datetime when the client
          received a book.
          :param date_return_: datetime. This is datetime when the client
          return a book.
-        :return: bool. 'True' it means was created new line of db or not.
+        :return: bool. 'True' it means was created new line in db or not.
+         If we received meaning 'False', it means what we receives
+         a mistake or the book quantity equal is zero.
         """
         log.info(f"[{Library_Borrow.add_one.__name__}] START")
         text = f"[{Library_Borrow.add_one.__name__}:"
@@ -39,19 +46,14 @@ class Library_Borrow(Library_basis):
             result_book = await book.receive(book_id_)
             client = Library_Person(Client)
             result_client = await client.receive(client_id_)
-            
+    
             for view in [result_client[0] if result_client else None,
                          result_book[0] if result_client else None]:
                 if not view:
                     text = f"{text} \
     Mistake => Not found the author. 'author_id' is invalid."
                     raise ValueError(text)
-                
-            """
-            There,  is need a CHECKING references now the client_id,book_id,
-            date_borrow and date_return, ALL from Borrow's db.
-            Client can take, then returns and after, his is to taking repeat a single book
-            """
+    
             # CREATE new a line
             borrow = Borrow(
                 book_id=book_id_,
@@ -59,9 +61,22 @@ class Library_Borrow(Library_basis):
                 date_borrow=date_borrow_,
                 date_return=date_return_
             )
-            self.session.add(borrow)
-            self.session.commit()
-            status = True
+            # Book quantity we make less
+            book = self.session.query(Book).filter_by(id=int(book_id_)).first()
+            
+            if book.quantity > 0:
+                if date_borrow_ and not date_return_:
+                    book.quantity -= 1 if not quantity_ else quantity_
+                    self.session.commit()
+        
+                # Book quantity we make more
+                if date_borrow_ and date_return_:
+                    book.quantity += 1 if not quantity_ else quantity_
+                    self.session.commit()
+                # One client take the one a book from library
+                self.session.add(borrow)
+                self.session.commit()
+                status = True
         except Exception as e:
             text = f"{text} \
 Mistake => {e.__str__()}"
@@ -94,21 +109,25 @@ Mistake => {e.__str__()}"
                     " Mistake => Not working index. \
 Index is invalid")
                 raise ValueError(text)
+                
             status = [self.serialize(view) for view in ([response]
                                                         if type(response) != list
                                                         else response)
                       ]
-            
+        
         except Exception as  e:
-            text = "".join(f"{text} Mistake => {e.__str__()}")
+            text = f"{text} Mistake => {e.__str__()}"
         finally:
             self.close()
             log.info(text)
             return status
             
     
-    async def update(self, index: int, book_id_: int = None, client_id_: int = None,
-               date_borrow_: datetime = None, date_return_= datetime.utcnow):
+    async def update(self, index: int, book_id_: int = None,
+                     client_id_: int = None,
+                     quantity_: int = 1,
+                     date_borrow_: datetime = None,
+                     date_return_: datetime = datetime.utcnow):
         """
          TODO: New data, we receive for entrypoint, for update the borrow's data \
             from tabel db. From entrypoint we can receive one \
@@ -155,8 +174,24 @@ Mistake => Object not found, was"
                 borrow.date_return = date_return_
                 text = "".join(f"{text}  Meaning this 'date_return' was updated.")
             self.session.commit()
-            text = "".join(f"{text}  Db 'Borrow' was updated. END")
+            text = f"{text}  Db 'Borrow' was updated. END"
             status = True
+            # Book quantity we make more
+            book = self.session.query(Book).filter_by(id=int(book_id_)).first()
+            if not book:
+               text = f"{text} \
+Mistake => Not found a book. 'book_id_' is invalid."
+               status = False
+            if (date_borrow_ and date_return_) and\
+                (date_borrow_ < date_return_):
+                book.quantity +=1
+            elif (date_borrow_ and not date_return_):
+                book.quantity -=1
+            elif (date_borrow_ and date_return_) and \
+              (date_borrow_ > date_return_):
+                pass
+            self.session.commit()
+
         except Exception as e:
             text = f"[{Library_Borrow.update.__name__}] \
 Mistake => {e.__str__()}"
@@ -166,12 +201,15 @@ Mistake => {e.__str__()}"
             self.close()
             log.info(text)
             return status
-        
+
     def serialize(self, borrow):
+        # GET QUANTITY
+        quantity_book = borrow.books.quantity
         return {
             "index": borrow.id if borrow.id else None,
             "book_id": borrow.book_id if borrow.book_id else None,
             "client_id": borrow.client_id if borrow.client_id else None,
             "date_borrow": borrow.date_borrow if borrow.date_borrow else None,
-            "date_return": borrow.date_return if borrow.date_return else None
+            "date_return": borrow.date_return if borrow.date_return else None,
+            "quantity": quantity_book if quantity_book else None
         }

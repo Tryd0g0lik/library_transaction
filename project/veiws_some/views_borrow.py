@@ -33,6 +33,7 @@ async def borrow_api_apth():
                 "client_id": 1,
                 "date_borrow": ...,
                 "date_return": ...
+                "quantity": ...
             }
         ``` or the single from over code. Example is the code below:
         ```jsom
@@ -40,7 +41,8 @@ async def borrow_api_apth():
             "book_id": null,
             "client_id": 2,
             "date_borrow": null,
-            "date_return": null
+            "date_return": null,
+            "quantity": null
         }
         # or
         {
@@ -73,6 +75,8 @@ async def borrow_api_apth():
                     else None,
                     date_return_=data["date_return"] if data["date_return"]
                     else None,
+                    quantity_=data["quantity"] if data["quantity"]
+                    else None,
                 )
                 if not result:
                     response["message"] = "Not OK"
@@ -88,6 +92,16 @@ async def borrow_api_apth():
     @csrf.exempt
     async def borrow_add() -> Response:
         """
+        TODO: New borrow's line adds to the Model db's table
+            - book_id_: int. The book's index from 'Book'.
+            - client_id_: int. The Client's index from 'Client'.
+            - date_borrow_: datetime. This is datetime when the client
+         received a book.
+            - date_return_: datetime. This is datetime when the client
+         return a book.
+        :return: bool. 'True' it means was created new line in db or not.
+         If we received meaning 'False', it means what we receives
+         a mis
                 We create a request by API's reference ('/api/v1/books').
                 Request's body contain:
                 ```json
@@ -95,7 +109,8 @@ async def borrow_api_apth():
                         "book_id":...,
                         "client_id": ...,
                         "date_borrow": ...,
-                        "date_return": ...
+                        "date_return": ...,
+                        "quantity": ...
                     }
                 ```
                 :return:```json
@@ -126,7 +141,9 @@ or 'date_borrow'"
                     client_id_=data["client_id"] if data["client_id"] else None,
                     date_borrow_=data["date_borrow"] if data["date_borrow"]
                     else None,
-                    date_return_= date_return,
+                    date_return_=date_return,
+                    quantity_=data["quantity"] if data["quantity"]
+                    else 1,
                     )
                 text = f"{text}  END"
                 return jsonify({"message": text}), 200
@@ -157,6 +174,9 @@ or 'date_borrow'"
                     "date_borrow": "Wed, 18 Dec 2024 07:49:19 GMT",
                     "date_return": null,
                     "index": 1
+                    "quantity": < integer/None > # If, our the script not received\
+the book's quantity. We will see the message "Mistake => Not received
+a quantity. Something what wrong with the book quantity."
                 },
             ]
         }
@@ -185,6 +205,19 @@ or 'date_borrow'"
             if not result:
                 response["message"] = "Not OK"
             response["result"] = result
+            # CHACKER a QUANTITY
+            """
+            If the 'chacker_quantity' has length more when zero,
+            for
+            """
+            chacker_quantity = \
+                [view for view in response["result"] if not view["quantity"]]
+            if len(chacker_quantity) > 0:
+                text = f"{text} \
+Mistake => Not received a quantity. Something what wrong with \
+the book quantity."
+                result["message"] = text
+
             text = f"{text}  END"
             status_code = 200
         except Exception as e:
