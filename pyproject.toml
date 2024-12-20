@@ -35,6 +35,7 @@ flask-wtf = "^1.2.2"
 flask-admin = {extras = ["export", "images", "s3", "sqlalchemy", "translation"], version = "^1.6.1"}
 flask-swagger-ui = "^4.11.1"
 flask-bcrypt = "^1.0.1"
+flasgger = "^0.9.7.1"
 
 [build-system]
 requires = ["poetry-core"]

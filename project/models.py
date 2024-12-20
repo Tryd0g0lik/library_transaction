@@ -3,6 +3,7 @@
 import logging
 
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.orm import sessionmaker
 
 from dotenv_ import APP_POSTGRES_DBNAME, DSN
@@ -29,3 +30,13 @@ def get_session():
     log.info(f"[{get_session.__name__}]: before run 'Session'")
     """Receive the session"""
     return Session()
+
+def get_session_async():
+
+    # Create on ENGINE
+    log.info(f"[{get_session.__name__}]: START")
+    Session = async_sessionmaker(engine, expire_on_commit=False)
+    log.info(f"[{get_session.__name__}]: before run 'Session'")
+    """Receive the session"""
+    return Session()
+

@@ -45,24 +45,26 @@ async def сlient_api_path():
         response = {"message": "Ok", "result": None}
         text = f"[{сlient_one_get.__name__}]:"
         log.info(f"{text} START")
+        status_code = 200
         try:
-            if not index:
-                text = f"{text} 'index' is invalid."
-                raise ValueError(text)
-
             person = Library_Person(Client)
             response["result"] = await person.update(
                 index,
                 new_firstname_=data["firstname"] if data["firstname"] else "",
                 new_birthday_=data["birthday"] if data["birthday"] else None,
             )
+            if not response["result"]:
+                text = f"{text} 'index' is invalid."
+                status_code = 400
+                response["message"] = text
             text = "".join(f"{text}  END")
         except Exception as e:
-            text = "".join(f"{text} Mistake => {e.__str__()}")
+            status_code = 400
+            text = f"{text} Mistake => {e.__str__()}"
             response["message"] = text
         finally:
             log.info(text)
-            return jsonify(response), 200
+            return jsonify(response), status_code
 
     @app.route("/api/v1/clients/<int:index>", methods=["DELETE"])
     @csrf.exempt
@@ -168,23 +170,33 @@ async def сlient_api_path():
     @app.route("/api/v1/clients", methods=["POST"])
     @csrf.exempt
     async def сlient_add() -> Response:
+        """
+        TODO: Add one position in Client's table of db. You can sending "firstname"\
+            and 'birthday' or only "firstname". \
+            Example for "birthday' is '2024-06-10' or '2024.06.10' or null.
+        :return:
+        """
         data = json.loads(request.data)
         text = f"[{сlient_add.__name__}]:"
         log.info(f"{text} START")
         try:
             persone = Library_Person(Client)
             key_list = list(data.keys())
-            if "firstname" not in key_list:
+            text = f"{text}  END"
+            if "firstname" not in key_list or not data["firstname"]:
                 text = "".join(f"{text}  Does not have a 'firstname'")
                 flash(text)
+                return jsonify({"message": text,
+                                "status": False}), 400
             else:
                 birthday = data["birthday"] if data["birthday"] else datetime.utcnow()
                 await persone.add_one(
                     firstname_=data["firstname"] if data["firstname"] else "",
                     birthday_=birthday,
                 )
-                text = f"{text}  END"
-                return jsonify({"message": text}), 200
+                
+                return jsonify({"message": "User was added",
+                                "status": True}), 200
         except Exception as e:
             text = f"{text}Mistake => {e.__str__()}"
             raise ValueError(text)

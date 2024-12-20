@@ -23,7 +23,7 @@ async def book_api_path():
         """
             Here, can change the one or everything Book's attributes from: \n
             - "author_id";
-            - "descriptions";
+            - "DESCRIPTIONS";
             - "index";
             - "quantity";
             - "title". Or the single attribute for changes. Index's attribute,
@@ -58,7 +58,9 @@ async def book_api_path():
                 "result": true # or false \n
             }
             ``` and the status code = 200
+            
         """
+       
         data = json.loads(request.data)
         response = {"message": "Ok", "result": None}
         text = f"[{book_one_change.__name__}]:"

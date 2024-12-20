@@ -190,7 +190,7 @@ Mistake => {e.__str__()}"
         try:
             # get data from db
             Model = self.get_model_name()
-            response: bool = await self.remove_one(index, Model)
+            response: bool = self.remove_one(index, Model)
             if not response:
                 text = f"{text}  Mistake => Not working index. \
 Index is invalid"
