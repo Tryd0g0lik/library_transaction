@@ -20,10 +20,90 @@ tags:
   - name: Client
     description: Everything about clients for book's library
 paths:
+  /clients:
+    get:
+      tags:
+        - get
+      summary: Remove one position
+      description: |-
+        Here,  we simple removing one position from the Clint's table of db.
+        Entrypoint mast receive index. By index will look up the position and delete.
+      operationId: сlient_get
+      responses:
+        '200':
+          description: There is successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response'
+              example:
+                massage: "Ok"
+                result:
+                  - birthday: "1980-06-25T00:00:00"
+                    firstname: "Igor"
+                    index: 1
+                  - birthday: "1980-06-25T00:00:00"
+                    firstname: "Roma"
+                    index: 2
+        '400':
+          description: |- 
+            There is not seccessful operation.\
+            THe 'massage' can has "Not Ok" or\
+            "[сlient_one_get]: Mistake => AsyncEngine expected, ..:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response'
+              example:
+                message: "Not Ok"
+                result: false
   /clients/{index}:
+    get:
+      tags:
+        - get
+      summary: Remove one position
+      description: |-
+        Here,  we simple removing one position from the Clint's table of db.
+        Entrypoint mast receive index. By index will look up the position and delete.
+      operationId: сlient_one_get
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: "Index of the client to update"
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: There is successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response'
+              example:
+                massage: "Ok"
+                result:
+                  - birthday: "1980-06-25T00:00:00"
+                    firstname: "Igor"
+                    index: 1
+        '400':
+          description: |- 
+            There is not seccessful operation.\
+            THe 'massage' can has "Not Ok" or\
+            "[сlient_one_get]: Mistake => AsyncEngine expected, ..:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response'
+              example:
+                message: "Not Ok"
+                result: false
+
     put:
       tags:
-        - Client
+        - put
       summary: Update an existing of client
       description: |-
         Here, can change the one or everything Client's attributes
@@ -52,13 +132,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client_response_put'
+                $ref: '#/components/schemas/Client_response'
         '400':
           description: Something what wrong. Maybe Invalid 'index' supplied.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client_response_put'
+                $ref: '#/components/schemas/Client_response'
               example:
                 message: "[сlient_one_get]: 'index' is invalid."
                 result: false
@@ -95,16 +175,23 @@ components:
           example: "2024-06-10"
           format: date-time
 
-    Client_response_put:
+    Client_response:
       type: object
       properties:
         message:
           type: string
           example: 'Ok'
         result:
-          type: boolean
-          nullable: true
-          example: true
+          oneOf:
+            - type: boolean
+              nullable: true
+              example: true
+            - type: object
+              example:
+                - birthday: "1980-06-25T00:00:00"
+                  firstname: "Igor"
+                  index: 1
+
 
   requestBodies:
     Client_request_put:
@@ -122,5 +209,3 @@ components:
           scopes:
             write:pets: "Modify pets in your account"
             read:pets: "Read your pets"
-
-
