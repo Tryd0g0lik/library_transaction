@@ -2,29 +2,59 @@ openapi: 3.0.3
 info:
   title: Swagger Petstore - OpenAPI 3.0
   description: |-
-    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
-    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
-    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
-    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
-
-    Some useful links:
-    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
-    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+    This is application for a library. When, user take the one book or more\ 
+    books, to application can indicating  which the book and how many books \
+    was user took.
+    This app can save data, so what the book, author who is, when was \
+    the birthday of author, and who take the book.
   termsOfService: http://swagger.io/terms/
   contact:
     email: apiteam@swagger.io
   version: 1.0.11
 servers:
   - url: ~/api/v1
-tags:
-  - name: Client
-    description: Everything about clients for book's library
 paths:
-  /api/v1/clients:
+  /clients:
+    get:
+      tags:
+        - client
+      summary: Get the all positions from Client's table of db.
+      description: |-
+        Here,  we simple removing one position from the Clint's table of db.
+        Entrypoint mast receive index. By index will look up the position and delete.
+      operationId: сlient_get
+      responses:
+        '200':
+          description: There is successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response'
+              example:
+                massage: "Ok"
+                result:
+                  - birthday: "1980-06-25T00:00:00"
+                    firstname: "Igor"
+                    index: 1
+                  - birthday: "1980-06-25T00:00:00"
+                    firstname: "Roma"
+                    index: 2
+        '400':
+          description: |- 
+            There is not seccessful operation.\
+            THe 'massage' can has "Not Ok" or\
+            "[сlient_one_get]: Mistake => AsyncEngine expected, ..:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response'
+              example:
+                message: "Not Ok"
+                result: false
     post:
       tags:
-        - post
-      summary:  Add one position in Client's table of db.
+        - client
+      summary: Add one position in Client's table of db.
       operationId: client_add
       requestBody:
         description: |-
@@ -62,51 +92,10 @@ paths:
               example:
                 message: "[сlient_add]:  END  Does not have a 'firstname'"
                 status: false
-
-              
-
-
-  /clients:
-    get:
-      tags:
-        - get
-      summary: Get the all positions from Client's table of db.
-      description: |-
-        Here,  we simple removing one position from the Clint's table of db.
-        Entrypoint mast receive index. By index will look up the position and delete.
-      operationId: сlient_get
-      responses:
-        '200':
-          description: There is successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Client_response'
-              example:
-                massage: "Ok"
-                result:
-                  - birthday: "1980-06-25T00:00:00"
-                    firstname: "Igor"
-                    index: 1
-                  - birthday: "1980-06-25T00:00:00"
-                    firstname: "Roma"
-                    index: 2
-        '400':
-          description: |- 
-            There is not seccessful operation.\
-            THe 'massage' can has "Not Ok" or\
-            "[сlient_one_get]: Mistake => AsyncEngine expected, ..:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Client_response'
-              example:
-                message: "Not Ok"
-                result: false
   /clients/{index}:
     get:
       tags:
-        - get
+        - client
       summary:  Get the single position by index from Client's table of db.
       description: |-
         Here,  we simple removing one position from the Clint's table of db.
@@ -146,10 +135,9 @@ paths:
               example:
                 message: "Not Ok"
                 result: false
-
     put:
       tags:
-        - put
+        - client
       summary: Update an existing of client
       description: |-
         Here, can change the one or everything Client's attributes
@@ -166,7 +154,7 @@ paths:
             type: integer
           example: 1
       requestBody:
-        description: Update an existent pet in the store
+        description: Update an existent position in the library
         content:
           application/json:
             schema:
@@ -220,7 +208,6 @@ components:
             the type string, but not null.
           example: "2024-06-10"
           format: date-time
-
     Client_response:
       type: object
       properties:
@@ -237,8 +224,6 @@ components:
                 - birthday: "1980-06-25T00:00:00"
                   firstname: "Igor"
                   index: 1
-
-
   requestBodies:
     Client_request:
       description: Pet object that needs to be added to the store

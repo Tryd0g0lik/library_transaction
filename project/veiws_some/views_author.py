@@ -21,6 +21,9 @@ async def author_api_path():
     @csrf.exempt
     async def author_one_change(index):
         """
+        TODO: Here, can change the one or everything data from Author's table of db.\
+          You can will change the all properties, this is 'firstname', 'secondname' and \
+          'birthday' or only one from everything properties.
         Here, can change the one or everything Author's attribute from: \n
         - 'firstname';
         - 'secondname';
@@ -47,9 +50,12 @@ async def author_api_path():
         response = {"message": "Ok", "result": None}
         text = f"[{author_one_get.__name__}]:"
         log.info(f"{text} START")
+        status_code = 200
         try:
             if not index:
                 text = f"{text} 'index' is invalid."
+                response["message"] = "Not Ok"
+                status_code = 400
                 raise ValueError(text)
 
             person = Library_Person(Author)
@@ -59,13 +65,17 @@ async def author_api_path():
                 new_secondname_=data["secondname"] if data["secondname"] else "",
                 new_birthday_=data["birthday"] if data["birthday"] else None,
             )
+            if not response["result"]:
+                response["message"] = "Not Ok"
             text = "".join(f"{text}  END")
         except Exception as e:
+            status_code = 400
             text = "".join(f"{text} Mistake => {e.__str__()}")
             response["message"] = text
+            response["message"] = "Not Ok"
         finally:
             log.info(text)
-            return jsonify(response), 200
+            return jsonify(response), status_code
 
     @app.route("/api/v1/authors/<int:index>", methods=["DELETE"])
     @csrf.exempt
