@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  version: 1.0.11
+servers:
+  - url: ~/api/v1
+tags:
+  - name: Client
+    description: Everything about clients for book's library
+paths:
+  /clients/{index}:
+    put:
+      tags:
+        - Client
+      summary: Update an existing of client
+      description: |-
+        Here, can change the one or everything Client's attributes
+        from 'firstname' and 'birthday'. Or the single 
+        attribute. Example 'firstname' or 'birthday'
+      operationId: book_one_change
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: "Index of the client to update"
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        description: Update an existent pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client_request_put'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response_put'
+        '400':
+          description: Something what wrong. Maybe Invalid 'index' supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client_response_put'
+              example:
+                message: "[сlient_one_get]: 'index' is invalid."
+                result: false
+
+      security:
+        - petstore_auth:
+            - write:client
+            - read:client
+components:
+  schemas:
+    Client_request_put:
+      type: object
+      properties:
+        firstname:
+          type: string
+          nullable: true
+          example: Igor
+          description: |-
+            Is it a value: Igor. But, you need
+            to look into the this parameters. One parameter (this is 'firstname' or
+            'birthday') from everything must contain. For a 'firstname' data this is
+            a string type. Example: 'Igor'. If, there we have value null, 
+            it means what parameter 'birthday' must contain the type string, 
+            but not null
+        birthday:
+          type: string
+          nullable: true
+          description: |-
+            Is it a value date. But, you need to look into the this parameters.
+            For a 'birthday' data this is a string type.
+            Example: '2024-06-10' or '2024.06.10'. If there we have value 
+            null. it means what parameter 'firstname' must contain 
+            the type string, but not null.
+          example: "2024-06-10"
+          format: date-time
+
+    Client_response_put:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Ok'
+        result:
+          type: boolean
+          nullable: true
+          example: true
+
+  requestBodies:
+    Client_request_put:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Client_request_put'
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://example.com/oauth/authorize
+          scopes:
+            write:pets: "Modify pets in your account"
+            read:pets: "Read your pets"
+
+
