@@ -1,3 +1,5 @@
+# https://docs.swagger.io/spec.html#511-object-example
+# https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.2.md#document-structure
 openapi: 3.0.3
 info:
   title: Swagger Petstore - OpenAPI 3.0
@@ -216,10 +218,10 @@ components:
           example: 'Ok'
         result:
           oneOf:
-            - type: boolean
+            - type: object
               nullable: true
               example: true
-            - type: object
+            - type: array
               example:
                 - birthday: "1980-06-25T00:00:00"
                   firstname: "Igor"

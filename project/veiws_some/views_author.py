@@ -172,6 +172,8 @@ async def author_api_path():
         try:
             person = Library_Person(Author)
             response["result"] = await person.receive()
+            if not response["result"]:
+                response["message"] = "Not Ok"
             text = "".join(f"{text}  END")
         except Exception as e:
             text = "".join(f"{text} Mistake => {e.__str__()}")

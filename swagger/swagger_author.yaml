@@ -1,3 +1,5 @@
+# https://docs.swagger.io/spec.html#511-object-example
+# https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.2.md#document-structure
 openapi: 3.0.3
 info:
   title: Swagger Petstore - OpenAPI 3.0
@@ -15,12 +17,42 @@ servers:
   - url: ~/api/v1
 paths:
   /authors/{index}:
+    get:
+      tags:
+        - author
+      summary: Get single position for only reading.
+      description: |-
+        Here, can receive the single position from Author's table db.\
+        You can only read the data. this is 'firstname', 'secondname' and \
+        'birthday'.
+      operationId: author_one_get
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: This is ID (index single position) from db.
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 2
+      responses:
+        '200':
+          description: There is successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    $ref: "#/components/schemas/Client_response/properties/message/oneOf/0"
+                  result:
+                    $ref: "#/components/schemas/Client_response/properties/result/oneOf/1"
+
     put:
       tags:
         - author
       summary: Get single position for update one or more data
       description: |-
-        Here, can change the one or everything data from Author's table of db.\
+        Here, can change the one or all data from Author's table of db.\
         You can will change the all properties, this is 'firstname', 'secondname' and \
         'birthday' or only one from everything properties.
       operationId: author_one_change
@@ -52,10 +84,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client_response'
-              example:
-                message: "Not Ok"
-                status: false
+                properties:
+                  message:
+                    $ref: '#/components/schemas/Client_response/properties/message/oneOf/1'
+                  result:
+                    $ref: '#/components/schemas/Client_response/properties/result/oneOf/2'
+
       security:
         - petstore_auth:
             - write:client
@@ -98,8 +132,11 @@ components:
       type: object
       properties:
         message:
-          type: string
-          example: 'Ok'
+          oneOf:
+            - type: string
+              example: 'Ok'
+            - type: string
+              example: "Not Ok"
         result:
           oneOf:
             - type: boolean
@@ -110,6 +147,10 @@ components:
                 - birthday: "1980-06-25T00:00:00"
                   firstname: "Igor"
                   index: 1
+                  secondname: "Igorev"
+            - type: boolean
+              example: false
+
   requestBodies:
     Client_request:
       description: Pet object that needs to be added to the store
