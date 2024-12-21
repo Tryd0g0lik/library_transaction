@@ -16,13 +16,147 @@ info:
 servers:
     - url: http://127.0.0.1:5000/api/v1
 paths:
-  /borrow:
+  /borrow/{index}:
     get:
         tags:
             - borrow
         summary: This is data from the middle table.
         description:
-            Here,  we simple receive position from the Borrow's table of db.
+            Here,  we simple get the one position from the Borrow's table of db.
+            It is table between the Book and Client of tables.
+        operationId: borrow_get
+        parameters:
+            -   name: index
+                in: path
+                required: true
+                description: |-
+                    Index of single position from  Client's table of db. Example is how '/clients/1'.
+                allowEmptyValue: false
+                schema:
+                    type: integer
+                example: 1
+        responses:
+            200:
+                description: |-
+                    Here,  we simple receive position from the Borrow's table of db.
+                content:
+                  application/json:
+                    schema:
+                        properties:
+                          message:
+                            $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                          result:
+                            $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                    example:
+                          message:
+                            $ref: '#/components/schemas/Book_response/properties/message/oneOf/0/example'
+                          result:
+                            $ref: '#/components/schemas/Book_response/properties/result/oneOf/1/example'
+            400:
+                description: |-
+                    This is not successful operation.
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                message:
+                                    type: string
+                                    example: Not Ok
+                                result:
+                                    $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                        example:
+                            message: Not OK
+                            status: false
+
+  /borrows/{index}/return:
+    patch:
+        tags:
+            - borrow
+        summary: This is data from the middle table.
+        description:
+            Here,  we simple update the one position in the Borrow's table of db.
+            It is table between the Book and Client of tables.
+        operationId: borrow_one_change
+        parameters:
+            -   name: index
+                in: path
+                required: true
+                description: |-
+                    Index of single position from  Client's table of db. 
+                    Example is how '/borrows/1/return'.
+                allowEmptyValue: false
+                schema:
+                    type: integer
+                example: 1
+        requestBody:
+            description: |-
+                Add one position in Author's table of db. You can sending.
+
+                Model 1:
+                    - book_id: 1
+                    - client_id: 1
+                    - date_borrow: "2024-06-10"
+                    - date_return: "2024-06-10"
+
+
+                Model 2:
+                    - book_id: null
+                    - client_id: 12
+                    - date_borrow: null
+                    - date_return: null
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Borrow_request_put'
+                    example:
+                        book_id:
+                            $ref: '#/components/schemas/Borrow_request_put/properties/book_id/example'
+                        client_id:
+                            $ref: '#/components/schemas/Borrow_request_put/properties/client_id/example'
+                        date_borrow:
+                            $ref: '#/components/schemas/Borrow_request_put/properties/date_borrow/example'
+                        date_return:
+                            $ref: '#/components/schemas/Borrow_request_put/properties/date_return/example'
+        responses:
+            200:
+                description: Successful operation
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                message:
+                                    $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                                result:
+                                    $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                        example:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0/example'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1/example'
+            400:
+                description: Not successful operation.
+                content:
+                  application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message:
+                            $ref: '#/components/schemas/Book_response/properties/message/oneOf/1/example'
+                        result:
+                            $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
+                            # Book_response
+
+
+    get:
+        tags:
+            - borrow
+        summary: This is data from the middle table.
+        description:
+            Here,  we simple get the one position from the Borrow's table of db.
             It is table between the Book and Client of tables.
         operationId: borrow_get
         responses:
@@ -79,9 +213,7 @@ paths:
             content:
                 application/json:
                     schema:
-                        properties:
-                            message:
-                                $ref: '#/components/schemas/Borrow_request'
+                        $ref: '#/components/schemas/Borrow_request'
                     example:
                         book_id:
                             $ref: '#/components/schemas/Borrow_request/properties/book_id/example'
@@ -123,7 +255,6 @@ paths:
                         result:
                             $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
                             # Book_response
-
   /books:
     get:
       tags:
@@ -873,16 +1004,37 @@ components:
         type: object
         properties:
             book_id:
-                $ref: "#/components/schemas/Borrow_request/properties/book_id"
+                type: integer
+                example: 1
+                description: This is index (ID) the one book from Book's table.
                 nullable: true
             client_id:
-                $ref: "#/components/schemas/Borrow_request/properties/client_id"
+                type: string
+                example: descriptions descriptions 3
+                description: Here is not a long description for the book
                 nullable: true
             date_borrow:
-                $ref: "#/components/schemas/Borrow_request/properties/date_borrow"
+                type: string
+                example: "2024-06-10"
+                format: date-time
+                description: |-
+                    This is date when the client take the book. 
+                    Example: 
+                    - '2024-06-10';
+                    - '2024.06.10';
+                    - null.
                 nullable: true
             date_return:
-                $ref: "#/components/schemas/Borrow_request/properties/date_return"
+                type: string
+                example: "2024-06-10"
+                format: date-time
+                description: |-
+                    This is date when the client take the book. 
+                    Example: 
+                    - '2024-06-10';
+                    - '2024.06.10';
+                    - null.
+                nullable: true
     Borrow_request:
         type: object
         properties:
@@ -1082,6 +1234,11 @@ components:
                         example: true
                     -   type: boolean
                         example: false
+
+
+
+
+
   securitySchemes:
     petstore_auth:
       type: oauth2
