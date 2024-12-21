@@ -226,9 +226,9 @@ async def book_api_path():
                 text = f"{text}  END"
                 if not result:
                     text = f"{text}  Something what wrong! False"
-                    return jsonify({"message": text}), 400
+                    return jsonify({"message": text, "result": False}), 400
 
-                return jsonify({"message": "Ok"}), 200
+                return jsonify({"message": "Ok", "result": True}), 200
         except Exception as e:
             text = f"{text}Mistake => {e.__str__()}"
             raise ValueError(text)

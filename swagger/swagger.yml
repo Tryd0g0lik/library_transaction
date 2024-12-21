@@ -67,6 +67,123 @@ paths:
                     example:
                         message: Not OK
                         status: false
+    post:
+        tags:
+            - book
+        summary: Create the one positions in Book's table of db.
+        description: Add a new peposition
+        operationId: book_add
+        requestBody:
+            description: |-
+                Add one position in Author's table of db. You can sending
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_request'
+                    example:
+                        properties:
+                            title:
+                                $ref: '#/components/schemas/Book_request/properties/title/example'
+                            descriptions:
+                                $ref: '#/components/schemas/Book_request/properties/descriptions/example'
+                            author_id:
+                                $ref: '#/components/schemas/Book_request/properties/author_id/example'
+                            quantity:
+                                $ref: '#/components/schemas/Book_request/properties/quantity/example'
+        responses:
+            200:
+                description: Successful operation
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                message:
+                                    $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                                result:
+                                    $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                        example:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0/example'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1/example'
+            400:
+                description: Not successful operation.
+                content:
+                  application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message:
+                            $ref: '#/components/schemas/Book_response/properties/message/oneOf/1/example'
+                        result:
+                            $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
+                            # Book_response
+  /books/{index}:
+    get:
+      tags:
+        - book
+      summary: Get one positions from Book's table of db.
+      description: |-
+        Here, we simple receive the one position from the Book's table of db.
+      operationId: book_get
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: This is ID (index single position) from db.
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+            description: There is successful operation
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                    example:
+                        message: "Ok"
+                        result:
+                            -   author_id: 1
+                                descriptions: descriptions descriptions
+                                index: 1
+                                quantity: 1
+                                register_number: 35c83f21-a920-49e6-a414-e0af1ee4e281
+                                title: title of book
+                            -   author_id: 1
+                                descriptions: descriptions descriptions 2
+                                index: 3
+                                quantity: 0
+                                register_number: 1ca4d03e-b868-483f-9a3b-d3d7f5d07b3b,
+                                title: NEW title of book 2
+        400:
+            description: |-
+                This is not successful operation.
+                attribute the 'message' can cantain message:
+                - 'Not Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message: Not OK
+                        status: false
+
   /authors:
     get:
       tags:
@@ -538,6 +655,27 @@ paths:
             - read:client
 components:
   schemas:
+    Book_request:
+        type: object
+        properties:
+            title:
+                type: string
+                example: title of book 3
+                description: This is a title of book
+            descriptions:
+                type: string
+                example: descriptions descriptions 3
+                description: Here is not a long description for the book
+            author_id:
+                type: integer
+                example: 2
+                description: |-
+                    This is a index/ID from the Author's table of db. 
+                    It is who is author of a book.
+            quantity:
+                type: integer
+                example: 24
+                description: This is a total quantity for the book.
     Author_request:
       type: object
       properties:
@@ -610,7 +748,7 @@ components:
     Book_response:
         type: object
         properties:
-            massage:
+            message:
                 oneOf:
                     -   type: string
                         example: "OK"
@@ -631,9 +769,22 @@ components:
                                 index:
                                     type: integer
                                     example: 1
+                                quantity:
+                                    type: integer
+                                    example: 24
+                                    description: This is a total quantity for the book.
                                 title:
                                     type: string
                                     example: title of book
+                                register_number:
+                                    type: string
+                                    description: |-
+                                        This table (Author) has the property 'quantity'
+                                        Example we have a quantity equals 24.
+                                        'register_number' this is property from ubstract 
+                                        the table from this db.
+                                        Every one book from the total quantity must have the
+                                        index, for self
                             example:
                                 author_id: 1
                                 descriptions: "descriptions descriptions "
@@ -641,6 +792,10 @@ components:
                                 quantity: 1
                                 register_number: 35c83f21-a920-49e6-a414-e0af1ee4e281
                                 title: title of book
+                    -   type: boolean
+                        example: true
+                    -   type: boolean
+                        example: false
   securitySchemes:
     petstore_auth:
       type: oauth2
