@@ -23,7 +23,7 @@ paths:
         summary: This is data from the middle table.
         description:
             Here,  we simple receive position from the Borrow's table of db.
-            It is between the Book and Client of tables.
+            It is table between the Book and Client of tables.
         operationId: borrow_get
         responses:
             200:
@@ -57,6 +57,72 @@ paths:
                         example:
                             message: Not OK
                             status: false
+    post:
+        tags:
+            - borrow
+        summary: This is data from the middle table.
+        description:
+            Here,  we simple add the one position in the Borrow's table of db.
+            It is table between the Book and Client of tables.
+
+            When is user takes the book, runs check the book's quantity. If number of the quantity book
+            not more than zero, we get the parameter 'result' has value the false
+            
+
+            If number of the quantity book is more 0, script make the total books number less from 
+            the Book's table. Logic is the old quantity of all book minus the number of book which client took.
+            There we get the parameter 'result' has value the true
+        operationId: borrow_add
+        requestBody:
+            description: |-
+                Add one position in Author's table of db. You can sending
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Borrow_request'
+                    example:
+                        book_id:
+                            $ref: '#/components/schemas/Borrow_request/properties/book_id/example'
+                        client_id:
+                            $ref: '#/components/schemas/Borrow_request/properties/client_id/example'
+                        date_borrow:
+                            $ref: '#/components/schemas/Borrow_request/properties/date_borrow/example'
+                        date_return:
+                            $ref: '#/components/schemas/Borrow_request/properties/date_return/example'
+        responses:
+            200:
+                description: Successful operation
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                message:
+                                    $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                                result:
+                                    $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                        example:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0/example'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1/example'
+            400:
+                description: Not successful operation.
+                content:
+                  application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message:
+                            $ref: '#/components/schemas/Book_response/properties/message/oneOf/1/example'
+                        result:
+                            $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
+                            # Book_response
 
   /books:
     get:
@@ -166,6 +232,7 @@ paths:
                         result:
                             $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
                             # Book_response
+
   /books/{index}:
     get:
       tags:
@@ -1015,11 +1082,6 @@ components:
                         example: true
                     -   type: boolean
                         example: false
-
-
-
-
-
   securitySchemes:
     petstore_auth:
       type: oauth2

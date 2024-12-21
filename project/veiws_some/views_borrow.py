@@ -134,7 +134,7 @@ or 'date_borrow'"
                 flash(text)
             else:
                 date_return = data["date_return"] if data["date_return"] else None
-                await book.add_one(
+                result = await book.add_one(
                     book_id_=data["book_id"] if data["book_id"] else None,
                     client_id_=data["client_id"] if data["client_id"] else None,
                     date_borrow_=data["date_borrow"] if data["date_borrow"] else None,
@@ -142,7 +142,11 @@ or 'date_borrow'"
                     quantity_=data["quantity"] if data["quantity"] else 1,
                 )
                 text = f"{text}  END"
-                return jsonify({"message": "OK"}), 200
+                if not result:
+                    text = f"{text}  Something what wrong! False"
+                    return jsonify({"message": text, "result": False}), 400
+
+                return jsonify({"message": "Ok", "result": True}), 200
         except Exception as e:
             text = f"{text} Mistake => {e.__str__()}"
             raise ValueError(text)
