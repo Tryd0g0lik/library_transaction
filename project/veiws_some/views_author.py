@@ -169,18 +169,21 @@ async def author_api_path():
         response = {"message": "Ok", "result": None}
         text = f"[{author_get.__name__}]:"
         log.info(f"{text} START")
+        status_code = 200
         try:
             person = Library_Person(Author)
             response["result"] = await person.receive()
             if not response["result"]:
                 response["message"] = "Not Ok"
+                status_code = 400
             text = "".join(f"{text}  END")
         except Exception as e:
+            status_code = 400
             text = "".join(f"{text} Mistake => {e.__str__()}")
             response["message"] = text
         finally:
             log.info(text)
-            return jsonify(response), 200
+            return jsonify(response), status_code
 
     @app.route("/api/v1/authors", methods=["POST"])
     @csrf.exempt

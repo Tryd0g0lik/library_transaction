@@ -62,6 +62,13 @@ paths:
         description: |-
           Add one position in Client's table of db. You can sending "firstname"\
           and 'birthday' or only "firstname". \
+          Model1: 
+           - "firstname" is string; 
+           - 'birthday' is string.
+           
+          Model2:
+           - "firstname" is string;
+           - 'birthday' is null.
           Example for "birthday' is '2024-06-10' or '2024.06.10' or null.
         content:
           application/json:
