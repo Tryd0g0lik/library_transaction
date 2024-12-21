@@ -14,7 +14,7 @@ info:
     email: apiteam@swagger.io
   version: 1.0.11
 servers:
-  - url: ~/api/v1
+    - url: http://127.0.0.1:5000/api/v1
 paths:
   /clients:
     get:
@@ -43,7 +43,7 @@ paths:
                     index: 2
         '400':
           description: |- 
-            There is not seccessful operation.\
+            There is not successful operation.\
             THe 'massage' can has "Not Ok" or\
             "[сlient_one_get]: Mistake => AsyncEngine expected, ..:
           content:
@@ -127,7 +127,7 @@ paths:
                     index: 1
         '400':
           description: |- 
-            There is not seccessful operation.\
+            There is not successful operation.\
             THe 'massage' can has "Not Ok" or\
             "[сlient_one_get]: Mistake => AsyncEngine expected, ..:
           content:
@@ -226,13 +226,13 @@ components:
                 - birthday: "1980-06-25T00:00:00"
                   firstname: "Igor"
                   index: 1
-  requestBodies:
-    Client_request:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Client_request'
+#  requestBodies:
+#    Client_request:
+#      description: Pet object that needs to be added to the store
+#      content:
+#        application/json:
+#          schema:
+#            $ref: '#/components/schemas/Client_request'
   securitySchemes:
     petstore_auth:
       type: oauth2

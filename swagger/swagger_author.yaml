@@ -14,7 +14,7 @@ info:
     email: apiteam@swagger.io
   version: 1.0.11
 servers:
-  - url: ~/api/v1
+  - url: http://127.0.0.1:5000/api/v1
 paths:
   /authors/{index}:
     get:
@@ -46,7 +46,17 @@ paths:
                     $ref: "#/components/schemas/Client_response/properties/message/oneOf/0"
                   result:
                     $ref: "#/components/schemas/Client_response/properties/result/oneOf/1"
-
+        '400':
+          description: |-
+            There is not successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    $ref: "#/components/schemas/Client_response/properties/message/oneOf/1"
+                  result:
+                    $ref: "#/components/schemas/Client_response/properties/result/oneOf/2"
     put:
       tags:
         - author
@@ -151,13 +161,13 @@ components:
             - type: boolean
               example: false
 
-  requestBodies:
-    Client_request:
-      description: Pet object that needs to be added to the store
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Author_request'
+#  requestBodies:
+#    Client_request:
+#      description: Pet object that needs to be added to the store
+#      content:
+#        application/json:
+#          schema:
+#            $ref: '#/components/schemas/Author_request'
   securitySchemes:
     petstore_auth:
       type: oauth2
