@@ -183,7 +183,112 @@ paths:
                     example:
                         message: Not OK
                         status: false
+    put:
+        tags:
+            - book
+        summary: Get single position for update one or more data.
+        description: |-
+            Here, you can change the one or all data from Book's's table of db.\
+            You can will change the all properties, this is:
+            - 'author_id';
+            - 'descriptions';
+            - 'index';
+            - 'quantity';
+            - 'title';
+            - 'register_number' or only one from everything properties/attributes.
+            
+            Model1:
+                - 'author_id' is integer;
+                - 'descriptions' is string;
+                - 'index' is integer;
+                - 'quantity' is integer;
+                - 'title'is string;
+                - 'register_number' is stringis string.
+            \
+            Model2:
+                - 'author_id' is integer;
+                - 'descriptions' null;
+                - 'index' null;
+                - 'quantity' null;
+                - 'title'is null;
+                - 'register_number' null. Or how do you want.
 
+        operationId: book_get
+        parameters:
+            -   name: index
+                in: path
+                required: true
+                description: This is ID (index single position) from db.
+                allowEmptyValue: false
+                schema:
+                    type: integer
+                example: 1
+        requestBody:
+            required: true
+            description: |-
+                Add one position in Author's table of db. You can sending
+            content:
+                application/json:
+                    schema:
+                        properties:
+
+                            title:
+                                $ref: "#/components/schemas/Book_request/properties/title"
+                            #     type: string
+                            #     example: "Update title of book 4"
+                            descriptions:
+                                $ref: "#/components/schemas/Book_request/properties/descriptions"
+                            #     type: string
+                            #     example: null
+                            author_id:
+                                $ref: "#/components/schemas/Book_request/properties/author_id"
+                            #     type: integer
+                            #     example: null
+                            quantity:
+                                $ref: "#/components/schemas/Book_request/properties/quantity"
+                            #     type: integer
+                            #     example: null
+                    example:
+                        properties:
+                            title: "Update title of book 4"
+                            descriptions: null
+                            author_id: null
+                            quantity: null
+        responses:
+            '200':
+                description: There is successful operation
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                message:
+                                    $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                                result:
+                                    $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                        example:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0/example'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1/example'
+
+            400:
+                description: |-
+                    This is not successful operation.
+                    attribute the 'message' can cantain message:
+                    - 'Not Ok'
+                content:
+                    application/json:
+                        schema:
+                            properties:
+                                message:
+                                    $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                                result:
+                                    $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                        example:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1/example'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
   /authors:
     get:
       tags:
@@ -660,20 +765,24 @@ components:
         properties:
             title:
                 type: string
+                nullable: true
                 example: title of book 3
                 description: This is a title of book
             descriptions:
                 type: string
+                nullable: true
                 example: descriptions descriptions 3
                 description: Here is not a long description for the book
             author_id:
                 type: integer
+                nullable: true
                 example: 2
                 description: |-
                     This is a index/ID from the Author's table of db. 
                     It is who is author of a book.
             quantity:
                 type: integer
+                nullable: true
                 example: 24
                 description: This is a total quantity for the book.
     Author_request:
