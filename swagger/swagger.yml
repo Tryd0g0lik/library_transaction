@@ -150,7 +150,7 @@ paths:
                             $ref: '#/components/schemas/Book_response/properties/result/oneOf/2/example'
                             # Book_response
 
-
+  /borrow:
     get:
         tags:
             - borrow
