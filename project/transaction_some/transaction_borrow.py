@@ -95,7 +95,7 @@ Mistake => {e.__str__()}"
             log.info(text)
             return status
 
-    async def receive(self, index: int):
+    async def receive(self, index: int = None):
         """
         TODO: Receive an one db's line from db.
         :param index: int. THis is the model's ID.
@@ -113,10 +113,8 @@ Mistake => {e.__str__()}"
                 response = self.session.query(Borrow).all()
 
             if not response:
-                text = text.join(
-                    " Mistake => Not working index. \
+                text = f" {text} Mistake => Not working index. \
 Index is invalid"
-                )
                 raise ValueError(text)
 
             status = [
@@ -177,16 +175,16 @@ Mistake => Object not found, was"
                 raise ValueError(text)
             if book_id_:
                 borrow.book_id = book_id_
-                text = "".join(f"{text}  Meaning this 'book_id' was updated.")
+                text = " Meaning this 'book_id' was updated."
             if client_id_:
                 borrow.client_id = client_id_
-                text = "".join(f"{text}  Meaning this 'client_id' was updated.")
+                text = " Meaning this 'client_id' was updated."
             if date_borrow_:
                 borrow.date_borrow = date_borrow_
-                text = "".join(f"{text}  Meaning this 'date_borrow' was updated.")
+                text = " Meaning this 'date_borrow' was updated."
             if date_return_:
                 borrow.date_return = date_return_
-                text = "".join(f"{text}  Meaning this 'date_return' was updated.")
+                text = " Meaning this 'date_return' was updated."
             if quantity_:
                 # Book quantity we make more
 

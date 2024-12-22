@@ -97,7 +97,6 @@ async def author_api_path():
             if not index:
                 text = f"{text} 'index' is invalid."
                 raise ValueError(text)
-
             person = Library_Person(Author)
             result = await person.removing(index)
             if not result:

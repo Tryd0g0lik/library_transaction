@@ -365,6 +365,59 @@ paths:
                             # Book_response
 
   /books/{index}:
+    delete:
+      tags:
+        - book
+      summary: You can not remove the book's position everytime.
+      description: |-
+        You can not remove the book's position everytime when you want. If the ID of your position is included to the table 
+        of Borrow of db, first, you must remove this ID from db of borrow. 
+        
+        If you try to remove the your position before checkibg the db of Borrow, you will get the 404 error.
+      operationId: book_one_remove
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: This is ID (index single position) from db.
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 1
+      responses:
+        200:
+            description: |-
+                This is successful operation.
+                attribute the 'message' can cantain message:
+                - 'Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                    example:
+                        message: OK
+                        status: true
+        400:
+            description: |-
+                This is not successful operation.
+                attribute the 'message' can cantain message:
+                - 'Not Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message: Not OK
+                        status: false
+
     get:
       tags:
         - book
@@ -764,6 +817,59 @@ paths:
               example:
                 message: "[сlient_add]:  END  Does not have a 'firstname'"
                 status: false
+    delete:
+      tags:
+        - author
+      summary: You can not remove the author's position everytime.
+      description: |-
+        You can not remove the author's position everytime when you want. If the ID of your position is included to the table 
+        of Book of db, first, you must remove this ID from db of Book. 
+        
+        If you try to remove the your position before checkibg the db of Book, you will get the 404 error.
+      operationId: author_one_remove
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: This is ID (index single position) from db.
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 1
+      responses:
+        200:
+            description: |-
+                This is successful operation.
+                attribute the 'message' can cantain message:
+                - 'Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                    example:
+                        message: OK
+                        status: true
+        400:
+            description: |-
+                This is not successful operation.
+                attribute the 'message' can cantain message:
+                - 'Not Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message: Not OK
+                        status: false
+
   /clients:
     get:
       tags:
@@ -994,10 +1100,59 @@ paths:
                 message: "[сlient_add]:  END  Does not have a 'firstname'"
                 status: false
 
-      security:
-        - petstore_auth:
-            - write:client
-            - read:client
+    delete:
+      tags:
+        - author
+      summary: You can not remove the client's position everytime.
+      description: |-
+        You can not remove the client's position everytime when you want. If the ID of your position is included to the table 
+        of Borrow of db, first, you must remove this ID from db of Borrow. 
+        
+        If you try to remove the your position before checkibg the db of Book, you will get the 404 error.
+      operationId: сlient_one_remove
+      parameters:
+        - name: index
+          in: path
+          required: true
+          description: This is ID (index single position) from db.
+          allowEmptyValue: false
+          schema:
+            type: integer
+          example: 1
+      responses:
+        200:
+            description: |-
+                This is successful operation.
+                attribute the 'message' can cantain message:
+                - 'Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/0'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/1'
+                    example:
+                        message: OK
+                        status: true
+        400:
+            description: |-
+                This is not successful operation.
+                attribute the 'message' can cantain message:
+                - 'Not Ok'
+            content:
+                application/json:
+                    schema:
+                        properties:
+                            message:
+                                $ref: '#/components/schemas/Book_response/properties/message/oneOf/1'
+                            result:
+                                $ref: '#/components/schemas/Book_response/properties/result/oneOf/2'
+                    example:
+                        message: Not OK
+                        status: false
+
 components:
   schemas:
     Borrow_request_put:
@@ -1234,11 +1389,6 @@ components:
                         example: true
                     -   type: boolean
                         example: false
-
-
-
-
-
   securitySchemes:
     petstore_auth:
       type: oauth2
