@@ -111,6 +111,10 @@ SECRET_KEY= < secret_key_of_your_app >
 ```
 ## Команды
 Вы знаете, что такое `pip` & `poetry` и умеете их устанавливать.
+В создании проекта использовался `poetry`.
+
+## requirements.txt
+`requirements.txt` это результат авто-генерации от `poetry`.
 
 ### Установка зависимостей
 ```text
