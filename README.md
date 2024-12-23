@@ -22,7 +22,7 @@
 
 2. При этом класс [Library_basis](project/transaction_some/transaction_basic.py),\
 работает напрямую с БД. Единый сценарий обработки данных от `Library_basis`\
-для всех 4-ёх объектов/образов.
+для всех 4-ёх объектов/образов (book, author, client, borrow).
 
 ### Логирование
 Сценарии [имеют логирование](project/logs.py). Результат видно в консоли и в файле `log_putout.log`. \
