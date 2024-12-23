@@ -59,8 +59,9 @@
 вся логика написана на `Flask`.
 
 ### OpenAPI
-OpenAPI так же изучил в рабочем режиме и создан [YAML-файл](swagger/swagger.yml).
-
+OpenAPI так же изучил в рабочем режиме и создан [YAML-файл](swagger/swagger.yml).\
+![OpenAPI](/img/docOpenAAPI.png) \
+![OpenAPI](/img/docOpenAPI_2.png) 
 
 ## Stack
 ```text
