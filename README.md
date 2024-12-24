@@ -142,5 +142,6 @@ Env. Var.: PYTHONUNBUFFERED=1,  PYTHONTRACEMALLOC=1, PWDEBUG=1
 ### API
 API в файле `project/views*.py` и [swagger.yml](swagger/swagger.yml). 
 
-
+## Тестирование
+Тест кода проводился в [предыдущей тестовой](https://github.com/Tryd0g0lik/library.git) работе
 
