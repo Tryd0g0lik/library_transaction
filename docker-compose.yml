@@ -3,23 +3,25 @@ services:
     container_name: app_db
     image: postgres:alpine
     environment:
-      ENV APP_POSTGRES_HOST=localhost
-      ENV APP_POSTGRES_PORT=5432
-      ENV APP_PROTOKOL=http
-      ENV APP_POSTGRES_PASS=123
-      ENV APP_POSTGRES_LOGIN=postgres
-      ENV APP_POSTGRES_DBNAME=library
+      - APP_POSTGRES_HOST=localhost
+      - APP_POSTGRES_PORT=5432
+      - APP_PROTOKOL=http
+      - APP_POSTGRES_PASS=123
+      - APP_POSTGRES_LOGIN=postgres
+      - APP_POSTGRES_DBNAME=library
     volumes:
       - postgres_data:/var/lib/postgresql/data
   flask_app:
-    container_name: app_library
+    container_name: app_lybrary
     build:
       context: .
       dockerfile: Dockerfile
+    working_dir: /app
+    command: python main.py
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://< Your_login >:< Your_password>@db:5432/lybrary # Замените на ваши данные
+      - DATABASE_URL=postgresql://postgres:123@db:5432/lybrary # Замените на ваши данные
     depends_on:
       - db
 

@@ -9,7 +9,7 @@ ENV APP_PROTOKOL=http
 ENV APP_POSTGRES_PASS=123
 ENV APP_POSTGRES_LOGIN=postgres
 ENV APP_POSTGRES_DBNAME=library
-ENV SECRET_KEY= < указать ключ >
+ENV SECRET_KEY=562778be-3e23-407e-8544-f5bc184cb547
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
