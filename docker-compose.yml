@@ -5,10 +5,16 @@ services:
     environment:
       - APP_POSTGRES_HOST=localhost
       - APP_POSTGRES_PORT=5432
-      - APP_PROTOKOL=http
+      - POSTGRES_PASSWORD=123
       - APP_POSTGRES_PASS=123
       - APP_POSTGRES_LOGIN=postgres
       - APP_POSTGRES_DBNAME=library
+    healthcheck:
+     test: ["CMD-SHELL", "${POSTGRES_USER} -U postgres"]
+     interval: 5s
+     timeout: 5s
+     retries: 5 # That is  five restarts
+    restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
   flask_app:
