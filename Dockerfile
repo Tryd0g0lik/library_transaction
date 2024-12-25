@@ -19,17 +19,12 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 
 # Устанавливаем зависимости
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade ./venv/bin/pip
+RUN python3 -m venv venv
+RUN ./venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Копируем все файлы приложения
 COPY . .
 
-# Указываем переменную окружения для Flask
-ENV FLASK_APP=main.py
-
-# Открываем порт для приложения
-EXPOSE 5000
-
 # Команда для запуска приложения
-# CMD ["flask", "run", "--host=0.0.0.0"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]

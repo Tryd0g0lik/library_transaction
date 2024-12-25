@@ -6,6 +6,7 @@ services:
       - APP_POSTGRES_HOST=localhost
       - APP_POSTGRES_PORT=5432
       - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=postgres
       - APP_POSTGRES_PASS=123
       - APP_POSTGRES_LOGIN=postgres
       - APP_POSTGRES_DBNAME=library
@@ -23,8 +24,8 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
-    command: > 
-      /bin/sh -c "source venv/bin/activate && python main.py"
+    command: >
+      /bin/sh -c "source venv/bin/activate && ./venv/bin/python main.py"
     ports:
       - "5000:5000"
     environment:
