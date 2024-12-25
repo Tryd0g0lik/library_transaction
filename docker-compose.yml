@@ -23,7 +23,8 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
-    command: python main.py
+    command: > 
+      /bin/sh -c "source venv/bin/activate && python main.py"
     ports:
       - "5000:5000"
     environment:
