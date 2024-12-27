@@ -10,7 +10,8 @@ ENV APP_POSTGRES_PASS=123
 ENV APP_POSTGRES_LOGIN=postgres
 ENV APP_POSTGRES_DBNAME=library
 ENV SECRET_KEY=562778be-3e23-407e-8544-f5bc184cb547
-RUN apt update && apt install -y python3-venv
+RUN apt update
+RUN apt install -y python3-venv
 RUN python3 -m venv /opt/venv
 # Устанавливаем рабочую директорию
 WORKDIR /app
